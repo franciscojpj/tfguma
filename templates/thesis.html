@@ -1,0 +1,430 @@
+<!doctype html>
+</body>
+</html>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+  
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"/>
+  <style type="text/css">
+     #mynetwork {
+      margin-left: 30%;
+      float:right;
+      margin-right: 40%;
+      margin-top: 1%;
+      width: 25%;
+      height: 150px;
+      border: 1px solid lightgray;
+      background-color: white;
+    }
+    /*la etiqueta seleccionada con fondo azul un poco mas oscuro*/
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{
+      background-color: #4c7ec1;
+    }
+
+    .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+/*letra de las etiquetas mostradas en el header*/
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+/*Fondo del dropdown seleccionado*/
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #4c7ec1;
+}
+
+/*texto que no es pestaña del menu en blanco*/
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+
+#label {
+  float: left; 
+  font-weight: bold;
+  width: 120px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+#info-person{
+  background-color: #ffffff;
+  position: fixed;
+  margin-left: 3%;
+  float:left;
+  width: 22%;
+  margin-top: 10%;
+  border-width: 3;
+  font-size: 17px; 
+}
+
+#panel-central{
+  margin-left: 10%;
+  width: 80%;
+  float:left;
+  margin-top: 3%;
+  font-size: small; 
+}
+
+#listaBotones{
+  margin-left: 45%;
+  width: 80%;
+  float:left;
+  font-size: 17px; 
+}
+
+#tabla-tesis{
+  margin-left: 10%;
+  width: 80% !important;
+  float:left;
+  margin-right: 10%;
+}
+
+#tag{
+  display: inline;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+#row{
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 0.5%;
+}
+
+.fillbox{
+  display: inline;
+  margin-left: 0.5%;
+}
+
+
+.panel{
+  background-color: #efefef;
+}
+
+table{
+  background-color: #ffffff;
+}
+body{
+  background-color: #e5e5e5;
+  font-weight: normal !important;
+}
+
+#tesis{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: #efefef;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+  </style>
+
+</head>
+
+<body>
+
+<!--Menu superior-->
+<nav class="navbar navbar-default navbar-inverse" style="background-color: #609ef2;border-color: #e5e5e5;position: fixed;width: 100%;float: top;" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img src="https://i.imgur.com/sH4wzX9.png" style="width: 40px;height: 40px;margin-top: -10px;"> Genealogy tree</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/searchData">Buscar datos</a></li>
+        <li style="display: none;" id="liMP"><a href="/doctor">Mi perfil</a></li>
+        <li style="display: none;" id="liID"><a href="/submitData">Insertar Datos</a></li>
+        <li style="display: none;" id="liA"><a href="/admin">Panel Admin</a></li>
+      </ul>
+
+      <div id="sesionIniciada"> 
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li><p class="navbar-text">¿Quieres iniciar sesión o registrate?</p></li>
+          <li><a href="/login" style="font-weight: bold;text-decoration: underline;">Acceder</a></li>
+        </ul>
+      </div>
+      <div id="sesionCerrada" style="display: none;">  
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li onclick="logOut();"><a href="" style="font-weight: bold;text-decoration: underline;">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!--Contenido de la pagina-->
+<div id="panel-central">
+  <div class="panel-default panel"  style="margin-top: 7%;">
+    <div id="title" style="text-align: left;margin-left: 2%;margin-top: 2%;font-weight: bold;font-size: x-large;"></div>
+    <a id="enlaceDoctor" style="margin-left: 2%;" href="">Ver informacion personal</a>
+    <hr style="margin-top: 2%;margin-bottom: 0%;">
+    </div>
+</div>
+
+<div id="panel-central" style="margin-top: 0%;">
+  <div class="panel-default panel" style="background-color: white;float: left;width: 100%;"  >
+  <button onclick="deleteTesis();" id="btn-delete" class="btn btn-danger a-btn-slide-text" style="float: right;margin-right: 2%;margin-top: 1%;display: none;">
+      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      <span><strong></strong></span>            
+    </button>
+  <a href="#" id="btn-edit" class="btn btn-default a-btn-slide-text" style="float: right;margin-right: 2%;margin-top: 1%;">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        <span><strong>Editar información</strong></span>            
+    </a>
+    <div id="divFallo" style="text-align: center;display: none;margin-top: 2%;">Lo sentimos, no hemos encontrado ninguna tesis asociada a este usuario :(</div>
+    <div id="divAcierto">
+      <div id="row" style="margin-top: 2%;"><p id="tag" >Titulo:</p><p class="fillbox" id="tag-titulo">-</p><br></div>
+      <div id="row"><p id="tag">Fecha de lectura:</p><p class="fillbox" id="tag-fecha">-</p><br></div>
+      <div id="row"><p id="tag">Abstract:</p><p style="margin-left: 2%;" id="tag-abstract">-</p></div>
+      <div id="row"><p id="tag">Direccion:</p><p class="fillbox" id="tag-direccion">-</p><br></div>
+      <div id="row"><p id="tag">Tribunal:</p><p class="fillbox" id="tag-jurado">-</p><br></div>
+      <div id="row"><p id="tag">Url:</p><a class="fillbox" id="tag-url" href="">-</a><br></div>
+      <div id="row"><p id="tag">Institucion:</p><p class="fillbox" id="tag-institucion">-</p><br></div>
+      <div id="row" style="margin-bottom: 2%;"><p id="tag">Keywords:</p><a class="fillbox" id="tag-keywords">-</p><br></div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var id;
+  tablaTes = $('#tabla-tesis').DataTable({
+    "bFilter":false,
+        "bInfo":false,
+        "paging": false,
+        "autoWidth": false,
+  });
+
+  //funcion que parsea url para coger parametros
+  function getIdParameter() {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+     var id=0;
+      if(sPageURL!=""){
+        sURLVariables = sPageURL.split('=');
+        id = sURLVariables[1];
+      }
+    return id;
+  }
+
+  id = getIdParameter();
+    if(id==0){
+      getSesion(1);
+    }else{
+      getSesion(0);
+    }
+
+    //Si recibimos 1 es que debemos mostrar el usuario de la sesion
+    //Si recibimos 0 es que debemos mostrar el que nos pasan como parametro
+    function getSesion(bitc){
+      var res=0;
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+        },
+        success: function(data){
+          bcook=0;
+
+          if(data && data!=0){
+            //Habilitar botones
+            $("#liMP").css('display','block');
+            $("#liID").css('display','block');
+            $("#sesionIniciada").css('display','none');
+            $("#sesionCerrada").css('display','block');
+            bcook=data.Value;
+            if(data==37){
+              $("#liA").show();
+            }
+          }
+
+          if(bitc==0){
+            cargarTesis(id);
+          }else{
+            cargarTesis(bcook);
+          }
+        }
+      });
+    }
+
+  function deleteTesis(){
+    $.ajax({
+      url:"/askDeleteTesis?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $( "#btn-delete" ).prop( "disabled", true );
+      }
+    });
+  }
+
+  function cargarTesis(id){
+    //Cargar tesis
+    $.ajax({
+      url:"/getTesis?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        if(data.Id!=""){
+          $("#btn-edit").attr('href',"/editData?id="+id);
+          $("#enlaceDoctor").attr('href',"/doctor?id="+id);
+          getThesisRel(data.Id);
+          $("#tag-titulo").text(data.Title);
+          $("#tag-fecha").text(data.DefenseDate);
+          $("#tag-abstract").text(data.Abstract);
+          $("#tag-institucion").text(data.Institution);
+          $("#tag-url").text(data.Url);
+          $("#tag-url").attr("href",data.Url);
+        }else{
+          $("#divAcierto").hide();
+          $("#divFallo").show();
+        }
+      }
+    });
+
+    //Cargar datos personales usuario
+    $.ajax({
+      url:"/getUsuario?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#title").text(data.Name+" "+data.Surname+" - Tesis");
+      }
+    });
+  }
+
+  function getThesisRel(thesisId){
+   //Cargar direccion de la tesis
+    $.ajax({
+      url:"/getDireccion?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-direccion").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-direccion").append('<a href="/visualizacion?id='+data[i].Id+'" style="text-decoration: underline;">'+data[i].Name+' '+data[i].Surname+'</a>, ');
+        }
+      }
+    });
+    
+    //Cargar jurado de la tesis
+    $.ajax({
+      url:"/getJurado?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-jurado").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-jurado").append('<a href="/visualizacion?id='+data[i].Id+'" style="text-decoration: underline;">'+data[i].Name+' '+data[i].Surname+'</a>, ');
+        }
+      }
+    });
+
+    //Cargar keywords de la tesis
+    $.ajax({
+      url:"/getKeywords?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-keywords").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-keywords").append(data[i].Word+", ");
+        }
+      }
+    });
+  }
+
+function logOut(){
+    $.ajax({
+      url:"/closeSession",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log("Ha cerrado sesion");
+      }
+      
+    });
+  }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+  
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"/>
+  <style type="text/css">
+     #mynetwork {
+      margin-left: 30%;
+      float:right;
+      margin-top: 1%;
+      margin-bottom: 5%;
+      width: 25%;
+      height: 500px;
+      border: 1px solid lightgray;
+      background-color: white;
+    }
+    /*la etiqueta seleccionada con fondo azul un poco mas oscuro*/
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{
+      background-color: #4c7ec1;
+    }
+
+    .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+/*letra de las etiquetas mostradas en el header*/
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+/*Fondo del dropdown seleccionado*/
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #4c7ec1;
+}
+
+/*texto que no es pestaña del menu en blanco*/
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+
+.label {
+  float: left; 
+  font-weight: bold;
+  font-size: small;
+  width: 190px;
+  text-align: right;
+}
+
+#info-person{
+  background-color: #ffffff;
+  position: fixed;
+  margin-left: 3%;
+  float:left;
+  width: 22%;
+  margin-top: 10%;
+  border-width: 3;
+  font-size: 17px; 
+}
+
+#panel-central{
+  margin-left: 10%;
+  width: 80%;
+  float:left;
+  margin-top: 3%;
+  font-size: 17px; 
+}
+
+#listaBotones{
+  margin-left: 45%;
+  width: 80%;
+  float:left;
+  font-size: 17px; 
+}
+
+#tabla-tesis{
+  margin-left: 10%;
+  width: 80% !important;
+  float:left;
+  margin-right: 10%;
+}
+
+#tag{
+  display: inline;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+#row{
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 0.5%;
+}
+
+.fillbox{
+  display: inline;
+  margin-left: 0.5%;
+}
+
+
+.panel{
+  background-color: #efefef;
+}
+
+table{
+  background-color: #ffffff;
+}
+body{
+  background-color: #e5e5e5;
+}
+
+#tesis{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: #efefef;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+th, td {
+    padding: 0%;
+}   
+
+p {
+  font-weight: normal;
+  
+}
+</style>
+</head>
+
+<body>
+
+<!--Menu superior-->
+<nav class="navbar navbar-default navbar-inverse" style="background-color: #609ef2;border-color: #e5e5e5;position: fixed;width: 100%;float: top;" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img src="https://i.imgur.com/sH4wzX9.png" style="width: 40px;height: 40px;margin-top: -10px;"> Genealogy tree</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/searchData">Buscar datos</a></li>
+        <li style="display: none;" id="liMP"><a href="/doctor">Mi perfil</a></li>
+        <li style="display: none;" id="liID"><a href="/submitData">Insertar Datos</a></li>
+        <li style="display: none;" id="liA"><a href="/admin">Panel Admin</a></li>
+      </ul>
+      
+      <div id="sesionIniciada"> 
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li><p class="navbar-text">¿Quieres iniciar sesión o registrate?</p></li>
+          <li><a href="/login" style="font-weight: bold;text-decoration: underline;">Acceder</a></li>
+        </ul>
+      </div>
+      <div id="sesionCerrada" style="display: none;">  
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li onclick="logOut();"><a href="" style="font-weight: bold;text-decoration: underline;">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!--Comienza el contenido de la pagina-->
+<div id="panel-central" style="margin-top: 7%;">
+  <div class="panel-default panel" style="background-color: white;float: left;width: 100%;"  >
+    <button onclick="deleteUsuario();" id="btn-delete" class="btn btn-danger a-btn-slide-text" style="float: right;margin-right: 2%;margin-top: 1%;display: none;">
+      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      <span><strong></strong></span>            
+    </button>
+    <a href="#" id="btn-edit" class="btn btn-default a-btn-slide-text" style="float: right;margin-right: 2%;margin-top: 1%;">
+      <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+      <span><strong>Editar información</strong></span>            
+    </a>
+    <div id="row" style="margin-top: 5%;margin-bottom: 5%;">
+      <div id="divFallo" style="text-align: center;display: none;">Lo sentimos, no hemos encontrado este usuario :(</div>
+      <div id="divResultado" style="font-size: small;">
+        <table >
+          <tr>
+            <th><div class="label" style="color: #436ea9;">·Autor:</div></th>
+            <th style="margin-left: 3%;vertical-align: center;"><p id="autor" style="margin-bottom: 0.25%;"></p></th>
+          </tr>
+          <tr id="divOrcid">
+            <th><div class="label" style="color: #436ea9;">·Orcid:</div></th>
+            <th style="margin-left: 3%;vertical-align: center;"><p id="orcid" style="margin-bottom: 0.25%;"></p></th>
+          </tr>
+          <tr id="divNacimiento">
+            <th><div class="label" style="color: #436ea9;">·Fecha de Nacimiento:</div></th>
+            <th style="margin-left: 3%;vertical-align: center;"><p id="fechaNacimiento" style="margin-bottom: 0.25%;"></p></th>
+          </tr>
+          </table>
+          <table id="divTesis">
+            <tr>
+              <th id="divTitulo"><div class="label" style="color: #436ea9;">·Titulo:</div></th>
+              <th style="margin-left: 5%;"><a id="urlTesis"  href=""><p  style="margin-bottom: 0%;" id="titulo"></p></a></th>
+            </tr>
+            <tr id="divDepartamento">
+              <th><div class="label" id="labDep" style="color: #436ea9;">·Departamento:</div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><p id="departamento" style="margin-bottom: 0.25%;"></p></th>
+            </tr>
+            <tr id="divUniversidad">
+              <th><div class="label" id="labUni" style="color: #436ea9;">·Universidad:</div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><p id="universidad" style="margin-bottom: 0.25%;"></p></th>
+            </tr>
+            <tr id="divLectura">
+              <th><div class="label" id="labLec" style="color: #436ea9;">·Fecha de lectura:</div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><p id="fechaLectura" style="margin-bottom: 0.25%;"></p></th>
+            </tr>
+            <tr id="divDirectores">
+               <th><div class="label" id="labLec" style="color: #436ea9;">·Directores:</div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="director0" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divDirectores">
+              <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="director1" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divDirectores">
+              <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="director2" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divDirectores">
+               <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="director3" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divTribunal">
+               <th><div class="label" id="labLec" style="color: #436ea9;">·Miembros del tribunal:</div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="tribunal0" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divTribunal">
+               <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="tribunal1" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divTribunal">
+               <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="tribunal2" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divTribunal">
+               <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="tribunal3" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divTribunal">
+               <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="tribunal4" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+            <tr id="divTribunal">
+               <th><div class="label" id="labLec" style="color: #436ea9;"></div></th>
+              <th style="margin-left: 5%;vertical-align: center;"><a id="tribunal5" style="margin-bottom: 0.25%;" href=""></a></th>
+            </tr>
+
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="panel-central" style="margin-top: 0%;" >
+<!--button id="btn" style="position: absolute;"> dsadsad </button-->
+<div id="mynetwork" style="width: 100%;margin-left: 10%;">
+
+</div>
+
+</div>
+<script type="text/javascript">
+  var id;
+  var nodos = new vis.DataSet(),aristas = new vis.DataSet();
+
+  //funcion que parsea url para coger parametros
+  function getIdParameter() {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+     var id=0;
+      if(sPageURL!=""){
+        sURLVariables = sPageURL.split('=');
+        id = sURLVariables[1];
+      }
+    return id;
+  }
+
+  function filtrarFecha(dateS){
+    if(dateS != "-"){
+      elems = dateS.split(/-|T/);
+      return elems[2]+"/"+elems[1]+"/"+elems[0];
+    }else{
+      return "";
+    }
+    
+  }
+
+
+  id = getIdParameter();
+    if(id==0){
+      getSesion(1);
+    }else{
+      getSesion(0);
+    }
+
+    //Si recibimos 1 es que debemos mostrar el usuario de la sesion
+    //Si recibimos 0 es que debemos mostrar el que nos pasan como parametro
+    function getSesion(bitc){
+      var res=0;
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+          cargarTesis(id);
+        },
+        success: function(data){
+          bcook=0;
+
+          if(data && data!=0){
+            //Habilitar botones
+            $("#liMP").css('display','block');
+            $("#liID").css('display','block');
+            $("#sesionIniciada").css('display','none');
+            $("#sesionCerrada").css('display','block');
+            bcook=data;
+            if(data==37){
+              $("#liA").show();
+              $("#btn-delete").show();
+            }
+          }
+
+          if(bitc==0){
+            cargarDoctor(id);
+          }else{
+            cargarDoctor(bcook);
+          }
+        }
+      });
+    }
+
+  function cargarDoctor(id){
+    $.ajax({
+      url:"/getUsuario?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        if(data.Name == ""){
+          $("#divResultado").hide();
+          $("#divFallo").show();
+          $("#btn-edit").hide();
+        }else{
+          $("#btn-edit").attr('href',"/editData?id="+id);
+          $("#autor").text(data.Surname+", "+data.Name);
+          $("#fechaNacimiento").text(data.Birth);
+          $("#orcid").text(data.Orcid);
+          comprobarCamposDoc();
+          cargarTesis(id);
+          cargarHijos(id);
+          cargarPadres(id);
+          cargarGrafo(id,data.Name+" "+data.Surname);
+        }
+      }
+    });
+  }
+
+  function deleteUsuario(){
+    $.ajax({
+      url:"/askDeleteUser?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $( "#btn-delete" ).prop( "disabled", true );
+      }
+    });
+  }
+
+  function cargarTesis(id){
+    //Cargar tesis
+    $.ajax({
+      url:"/getTesis?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        if(data.Id != ""){
+          $("#titulo").text(data.Title);
+          $("#urlTesis").attr("href", "/thesis?id="+id);
+          $("#departamento").text(data.Department);
+          $("#universidad").text(data.Institution);
+          $("#fechaLectura").text(data.DefenseDate);
+          comprobarCamposTes();
+          cargarDireccion(data.Id);
+          cargarTribunal(data.Id);
+        }else{
+          $("#divTesis").hide();
+        } 
+      }
+    });
+  }
+
+  function cargarDireccion(id){
+    //Cargar tesis
+    $.ajax({
+      url:"/getDireccion?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          $("#director"+(i+1)).text(data[i].Surname+", "+data[i].Name);
+          $("#director"+(i+1)).attr('href',"/doctor?id="+data[i].Id);
+        }
+      }
+    });
+  }
+
+  function cargarTribunal(id){
+    //Cargar jurado de la tesis
+    $.ajax({
+      url:"/getJurado?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          $("#tribunal"+(i+1)).text(data[i].Surname+", "+data[i].Name);
+          $("#tribunal"+(i+1)).attr('href',"/doctor?id="+data[i].Id);
+        }
+      }
+    });
+  }
+
+  function cargarHijos(id){
+    //Cargar tesis
+    $.ajax({
+      url:"/getSons?id="+id+"&depth="+2,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          $("#divAlumnos").append("<p style='margin-left: 18%;'><a href='/doctor?id="+data[i].IdHijo+"'>"+data[i].Surname+", "+data[i].Name+"</a></p>");
+
+        }
+      }
+    });
+  }
+
+//Borrar metodo
+   function cargarPadres(id){
+    //Cargar tesis
+    $.ajax({
+      url:"/getFathers?id="+id+"&depth="+2,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+      }
+    });
+  }
+
+  function cargarGrafo(id,nombre){
+    nodos.add([{id:  parseInt(id), title:  parseInt(id), label: nombre}]);
+
+    nodosDescendientes(id);
+  }
+
+  function nodosDescendientes(id){
+    $.ajax({
+      url:"/getSons?id="+id+"&depth="+3,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          nodos.add([
+            {id: data[i].IdHijo, title: data[i].IdHijo,label: data[i].Name+" "+data[i].Surname}
+            ]);
+          aristas.add([
+            {from: data[i].IdPadre, to: data[i].IdHijo}
+            ]);
+        }
+        nodosAscendientes(id);
+      }
+    });
+  }
+
+  function nodosAscendientes(id){
+     $.ajax({
+      url:"/getFathers?id="+id+"&depth="+3,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          nodos.add([
+            {id: data[i].IdPadre, title: data[i].IdPadre,label: data[i].Name+" "+data[i].Surname}
+            ]);
+          aristas.add([
+            {from: data[i].IdPadre, to: data[i].IdHijo}
+            ]);
+        }
+        iniciarGrafo();
+      }
+    });
+  }
+
+  function comprobarCamposDoc(){
+    if($("#fechaNacimiento").text() == ""){
+      $("#divNacimiento").hide();
+    }
+
+    if($("#orcid").text() == ""){
+      $("#divOrcid").hide();
+    }   
+  }
+
+  function comprobarCamposTes(){
+    if($("#titulo").text()==""){
+      $("#divTesis").hide();
+    }else{
+      if($("#departamento").text() == ""){
+        $("#divDepartamento").hide();
+      }
+
+      if($("#universidad").text() == ""){
+        $("#divUniversidad").hide();
+      }
+
+      if($("#fechaLectura").text() == ""){
+        $("#divLectura").hide();
+      }
+    }
+  }
+
+  function logOut(){
+    $.ajax({
+      url:"/closeSession",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log("Ha cerrado sesion");
+      }
+      
+    });
+  }
+
+  function iniciarGrafo(){
+
+     // create a network
+     var container = document.getElementById('mynetwork');
+     var data = {
+       nodes: nodos,
+       edges: aristas
+     };
+     var options = {
+       autoResize: true,
+       height: '100%',
+       width: '100%',
+       edges: {
+         font: {
+           size: 12
+         },
+         arrows: {
+           to: {
+             type: 'arrow',
+             enabled: true,
+           }
+         },
+       },
+       nodes: {
+         shape: 'box',
+         font: {
+           bold: {
+             color: '#0077aa'
+           },
+           multi: true,
+           size: 12
+         },
+         size: 30
+       },
+       physics: {
+         enabled: false
+       },
+       layout: {
+         improvedLayout:false,
+           hierarchical: {
+             enabled:true,
+             levelSeparation: 150,
+             nodeSpacing: 400,
+             treeSpacing: 200,
+             blockShifting: true,
+             edgeMinimization: true,
+             parentCentralization: true,
+             direction: 'UD',        // UD, DU, LR, RL
+             sortMethod: 'directed'   // hubsize, directed
+           }
+       }
+     };
+     var network = new vis.Network(container, data, options);
+ 
+     network.redraw();
+ 
+     network.on('click',function(properties){
+         console.log(properties);
+         var ids = properties.nodes;
+         console.log(ids[0]);
+     });
+   }
+
+  /*
+    //Query conseguir hijos y nietos del 37
+    WITH RECURSIVE hijos AS (
+     SELECT reader, supervisor, 1 as depth
+     FROM reltes
+     WHERE supervisor = 37
+
+     UNION
+
+     SELECT r.reader, r.supervisor, h.depth+1
+     FROM reltes r
+     INNER JOIN hijos h ON h.reader = r.supervisor
+    ) SELECT
+     *
+    FROM
+     hijos
+     WHERE depth<2;
+
+    //Query que consigue padres y abuelos
+    WITH RECURSIVE hijos AS (
+     SELECT reader, supervisor, 1 as depth
+     FROM reltes
+     WHERE reader = 37
+
+     UNION
+
+     SELECT r.reader, r.supervisor, h.depth+1
+     FROM reltes r
+     INNER JOIN hijos h ON h.supervisor = r.reader
+    ) SELECT
+     *
+    FROM
+     hijos
+     WHERE depth<2;
+  */
+/*
+  function getThesisRel(thesisId){
+   //Cargar direccion de la tesis
+    $.ajax({
+      url:"/getDireccion?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-direccion").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-direccion").append('<a href="/visualizacion?id='+data[i].Id+'" style="text-decoration: underline;">'+data[i].Name+' '+data[i].Surname+'</a>');
+        }
+      }
+    });
+    
+    
+
+    //Cargar keywords de la tesis
+    $.ajax({
+      url:"/getKeywords?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-keywords").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-keywords").append(data[i].Word);
+        }
+      }
+    });
+  }*/
+
+
+</script>
+
+
+</body>
+</html>

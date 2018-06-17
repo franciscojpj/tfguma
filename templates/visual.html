@@ -1,0 +1,380 @@
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+  
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"/>
+  <style type="text/css">
+     #mynetwork {
+      margin-left: 30%;
+      float:right;
+      margin-right: 40%;
+      margin-top: 1%;
+      width: 25%;
+      height: 150px;
+      border: 1px solid lightgray;
+      background-color: white;
+    }
+    /*la etiqueta seleccionada con fondo azul un poco mas oscuro*/
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{
+      background-color: #4c7ec1;
+    }
+
+    .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+/*letra de las etiquetas mostradas en el header*/
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+/*Fondo del dropdown seleccionado*/
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #4c7ec1;
+}
+
+/*texto que no es pestaña del menu en blanco*/
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+
+#label {
+  float: left; 
+  font-weight: bold;
+  width: 120px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+#info-person{
+  background-color: #ffffff;
+  position: fixed;
+  margin-left: 3%;
+  float:left;
+  width: 22%;
+  margin-top: 10%;
+  border-width: 3;
+  font-size: 17px; 
+}
+
+#panel-central{
+  margin-left: 10%;
+  width: 80%;
+  float:left;
+  margin-top: 3%;
+  font-size: 17px; 
+}
+
+#listaBotones{
+  margin-left: 45%;
+  width: 80%;
+  float:left;
+  font-size: 17px; 
+}
+
+#tabla-tesis{
+  margin-left: 10%;
+  width: 80% !important;
+  float:left;
+  margin-right: 10%;
+}
+
+#tag{
+  display: inline;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+#row{
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 0.5%;
+}
+
+.fillbox{
+  display: inline;
+  margin-left: 0.5%;
+}
+
+
+.panel{
+  background-color: #efefef;
+}
+
+table{
+  background-color: #ffffff;
+}
+body{
+  background-color: #e5e5e5;
+}
+
+#tesis{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: #efefef;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+  </style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-inverse" style="background-color: #609ef2;border-color: #e5e5e5;position: fixed;width: 100%;float: top;" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Genealogy tree</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Main</a></li>
+        <li><a href="#">Mi Perfil</a></li>
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search person or thesis">
+          </div>
+          <button type="submit" class="btn btn-default">Search</button>
+        </form>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><p class="navbar-text">Already have an account?</p></li>
+        <li><a href="#" style="font-weight: bold;text-decoration: underline;">Sign in</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id="panel-central">
+  <div class="panel-default panel"  style="margin-top: 7%;">
+    <div id="title" style="text-align: left;margin-left: 2%;margin-top: 2%;font-weight: bold;font-size: x-large;">Francisco Javier Perez Jorge - Tesis</div>
+    <hr style="margin-top: 2%;margin-bottom: 0%;">
+    </div>
+</div>
+
+<div id="listaBotones">
+  <button type="button" class="btn btn-info">Información</button>
+  <button type="button" class="btn btn-info">Tesis</button>
+</div>
+
+<div id="panel-central">
+  <div class="panel-default panel" style="background-color: white;float: left;width: 100%;"  >
+    <div id="row" style="margin-top: 2%;"><p id="tag" >Titulo:</p><p class="fillbox" id="tag-titulo">-</p><br></div>
+    <div id="row"><p id="tag">Fecha de lectura:</p><p class="fillbox" id="tag-fecha">-</p><br></div>
+    <div id="row"><p id="tag">Abstract:</p><p style="margin-left: 2%;" id="tag-abstract">-</p></div>
+    <div id="row"><p id="tag">Direccion:</p><p class="fillbox" id="tag-direccion">-</p><br></div>
+    <div id="row"><p id="tag">Tribunal:</p><p class="fillbox" id="tag-jurado">-</p><br></div>
+    <div id="row"><p id="tag">Url:</p><a class="fillbox" id="tag-url" href="">-</a><br></div>
+    <div id="row"><p id="tag">Institucion:</p><p class="fillbox" id="tag-institucion">-</p><br></div>
+    <div id="row" style="margin-bottom: 2%;"><p id="tag">Keywords:</p><a class="fillbox" id="tag-keywords">-</p><br></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  var id;
+  tablaTes = $('#tabla-tesis').DataTable({
+    "bFilter":false,
+        "bInfo":false,
+        "paging": false,
+        "autoWidth": false,
+  });
+
+  //funcion que parsea url para coger parametros
+  function getIdParameter() {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+     var id=0;
+      if(sPageURL!=""){
+        sURLVariables = sPageURL.split('=');
+        id = sURLVariables[1];
+      }
+    return id;
+  }
+
+  function filtrarFecha(dateS){
+    elems = dateS.split(/-|T/);
+    return elems[2]+"/"+elems[1]+"/"+elems[0];
+  }
+
+
+  id = getIdParameter();
+    if(id==0){
+      getSesion(1);
+    }else{
+      getSesion(0);
+    }
+
+    function getSesion(bitc){
+      var res=0;
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+          cargarTesis(id);
+        },
+        success: function(data){
+          if(data && bitc==1){
+            cargarTesis(data.Value);
+          }else{
+            cargarTesis(id);
+          }
+        }
+      });
+    }
+
+
+  function cargarTesis(id){
+    //Cargar tesis
+    $.ajax({
+      url:"/getTesis?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        getThesisRel(data.Id);
+        $("#tag-fecha").text("");
+        $("#tag-titulo").text(data.Title);
+        fecha = filtrarFecha(data.DefenseDate);
+        $("#tag-fecha").text(fecha);
+        $("#tag-abstract").text(data.Abstract);
+        $("#tag-institucion").text(data.Institution);
+        $("#tag-url").text(data.Url);
+        $("#tag-url").attr("href",data.Url);
+      }
+    });
+
+    //Cargar datos personales usuario
+    $.ajax({
+      url:"/getUsuario?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#title").text(data.Name+" "+data.Surname+" - Tesis");
+        console.log(data);
+      }
+    });
+  }
+
+  function getThesisRel(thesisId){
+   //Cargar direccion de la tesis
+    $.ajax({
+      url:"/getDireccion?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-direccion").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-direccion").append('<a href="/visualizacion?id='+data[i].Id+'" style="text-decoration: underline;">'+data[i].Name+' '+data[i].Surname+'</a>');
+        }
+      }
+    });
+    
+    //Cargar jurado de la tesis
+    $.ajax({
+      url:"/getJurado?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-jurado").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-jurado").append('<a href="/visualizacion?id='+data[i].Id+'" style="text-decoration: underline;">'+data[i].Name+' '+data[i].Surname+'</a>');
+        }
+      }
+    });
+
+    //Cargar keywords de la tesis
+    $.ajax({
+      url:"/getKeywords?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-keywords").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-keywords").append(data[i].Word);
+        }
+      }
+    });
+  }
+
+
+</script>
+
+
+</body>
+</html>

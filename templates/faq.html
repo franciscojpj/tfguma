@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ 
+
+  <!--script src="//code.jquery.com/jquery-1.11.1.min.js"></script-->
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  
+  <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+     #mynetwork {
+      margin-left: 30%;
+      float:right;
+      margin-right: 40%;
+      margin-top: 1%;
+      width: 25%;
+      height: 150px;
+      border: 1px solid lightgray;
+      background-color: white;
+    }
+    /*la etiqueta seleccionada con fondo azul un poco mas oscuro*/
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{
+      background-color: #4c7ec1;
+    }
+
+    .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+/*letra de las etiquetas mostradas en el header*/
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+/*Fondo del dropdown seleccionado*/
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #4c7ec1;
+}
+
+/*texto que no es pestaña del menu en blanco*/
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+
+
+
+#info-person{
+  background-color: #ffffff;
+  position: fixed;
+  margin-left: 3%;
+  float:left;
+  width: 22%;
+  margin-top: 10%;
+  border-width: 3;
+  font-size: 17px; 
+}
+
+#panel-central{
+  margin-left: 10%;
+  width: 80%;
+  float:left;
+  margin-top: 3%;
+  font-size: 17px; 
+}
+
+#listaBotones{
+  margin-left: 45%;
+  width: 80%;
+  float:left;
+  font-size: 17px; 
+}
+
+#tabla-tesis{
+  margin-left: 10%;
+  width: 80% !important;
+  float:left;
+  margin-right: 10%;
+}
+
+#tag{
+  display: inline;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+
+.fillbox{
+  display: inline;
+  margin-left: 0.5%;
+}
+
+
+.panel{
+  background-color: #efefef;
+}
+
+table{
+  background-color: #ffffff;
+}
+body{
+  background-color: #e5e5e5;
+}
+
+#tesis{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: #efefef;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+/*Quitar borde encima de la tabla*/
+.mdl-grid{
+      padding: 0px;
+    }
+
+  .form-control{
+    display: inline-block;
+    width: 80%;
+  }
+
+  #tipoBusquedaAutor{
+    width: 19%;
+  }
+
+  #label{
+    float: left;
+    width: 10%;
+    text-align: right;
+    margin-right: 1%;
+  }
+
+  #row {
+  width: 100%;
+  margin-top: 1%;
+  text-align: left;
+
+}
+
+
+label {
+  float: left; 
+  font-weight: bold;
+  font-size: large;
+  width: 150px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+p{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+thead {
+  display:none;
+}
+
+#tabla-tesis{
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+th, td {
+    padding: 0.25%;
+}
+.pregunta {
+  font-weight: bold;
+}
+
+  </style>
+
+</head>
+
+<body>
+
+<!--Menu superior-->
+<nav class="navbar navbar-default navbar-inverse" style="background-color: #609ef2;border-color: #e5e5e5;position: fixed;width: 100%;float: top;" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img src="https://i.imgur.com/sH4wzX9.png" style="width: 40px;height: 40px;margin-top: -10px;"> Genealogy tree</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="/searchData">Buscar datos</a></li>
+        <li style="display: none;" id="liMP"><a href="/doctor">Mi perfil</a></li>
+        <li style="display: none;" id="liID"><a href="/submitData">Insertar Datos</a></li>
+        <li style="display: none;" id="liA"><a href="/admin">Panel Admin</a></li>
+      </ul>
+      
+      <div id="sesionIniciada"> 
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li><p class="navbar-text">¿Quieres iniciar sesión o registrate?</p></li>
+          <li><a href="/login" style="font-weight: bold;text-decoration: underline;">Acceder</a></li>
+        </ul>
+      </div>
+      <div id="sesionCerrada" style="display: none;">  
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li onclick="logOut();"><a href="" style="font-weight: bold;text-decoration: underline;">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!--Contenido de la pagina-->
+<div id="panel-central" style="margin-top: 7%;display: block;">
+  <div class="panel-default panel"  style="background-color: white;float: left;width: 100%;margin-top: 0%;"  >
+    <div id="contentTesis" style="margin-top: 3%;margin-bottom: 2%;">
+      <p class="pregunta">¿Qué puedo hacer si quiero registrarme pero alguien ya ha insertado mis datos?</p>
+      <p> Si esta es su situación, deberá registrarse en nuestro sistema y deberá enviar un correo a la direccion (email) 
+      confirmando esta información para que nuestro equipo modifique el usuario permitiendole el acceso </p>
+
+      <p class="pregunta" style="margin-top: 2%;">¿Qué puedo hacer si existe información mía en esta página web y prefiero que se borre?</p>
+      <p> Deberá enviarnos un correo identificandose para que nuestro equipo proceda a eliminar su información sin mayor dilación</p>
+
+      <p class="pregunta" style="margin-top: 2%;">He insertado datos pero no aparecen al buscarlo en la página web</p>
+      <p> Toda información suministrada en nuestro sistema es confimada por un administrador y hasta que esta no sea confirmada no podrá verse en el sistema por lo que deberá esperar a que esta sea aceptada</p>
+
+      <p class="pregunta" style="margin-top: 2%;"></p>
+      <p></p>
+
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    getSesion();
+
+  });
+
+ 
+    //Si recibimos 1 es que debemos mostrar el usuario de la sesion
+    //Si recibimos 0 es que debemos mostrar el que nos pasan como parametro
+    function getSesion(){
+      var res=0;
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+        },
+        success: function(data){
+          bcook=0;
+
+          if(data && data!=0){
+            //Habilitar botones
+            $("#liMP").css('display','block');
+            $("#liID").css('display','block');
+            $("#sesionIniciada").css('display','none');
+            $("#sesionCerrada").css('display','block');
+            if(data==37){
+              $("#liA").show();
+            }
+          }
+        }
+      });
+    }
+
+
+
+  function logOut(){
+    $.ajax({
+      url:"/closeSession",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log("Ha cerrado sesion");
+      }
+      
+    });
+  }
+
+</script>
+
+
+</body>
+</html>

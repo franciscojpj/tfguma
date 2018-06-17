@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <title>Hello, world!</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+  
+  <script type=text/javascript>
+    var oauthWindow;
+
+
+    function hacerLlamada() {
+    var code = $("#code").val();
+    console.log(code);
+    $.ajax({
+            url: "https://sandbox.orcid.org/oauth/token",
+            type: "POST",
+            headers: {
+              'Accept':'application/json',
+            },
+            data: {
+              client_id:"APP-DI48OJOVPURZQ7N2",
+              client_secret:"d7f4b0b1-2a95-41f0-a381-61a424054093",
+              grant_type:"authorization_code",
+              code: code,
+              redirect_uri:"http://localhost:8000/orcid",
+            },
+            error: function(data) {
+              console.log("Piscinazo");
+            },
+            success: function(data) {
+              console.log("Exito");
+              console.log(data);
+            }
+        });
+    }
+  </script>
+    <div class="panel panel-info" style="margin-left: 30%;margin-right: 30%;margin-top: 15%">
+      <div class="panel-heading" style="text-align: center;font-weight: bold;font-size: 125%;">Log in</div>
+      <div class="panel-body">
+        <div id="left-login" style="float: left;">
+            <div class="row">
+              <label for="name" style="width: 100px;text-align: right;">Code</label>
+              <input type="text" id="code" style="margin-left: 10px">
+              
+            </div>
+            <button type="submit" style="margin-left: 40%" onclick="hacerLlamada();">Confirmar</button>
+        </div>  
+      </div>
+    </div>
+  </body>
+</html>

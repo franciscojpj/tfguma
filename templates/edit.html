@@ -1,0 +1,1103 @@
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ 
+
+  <!--script src="//code.jquery.com/jquery-1.11.1.min.js"></script-->
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  
+  <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+     #mynetwork {
+      margin-left: 30%;
+      float:right;
+      margin-right: 40%;
+      margin-top: 1%;
+      width: 25%;
+      height: 150px;
+      border: 1px solid lightgray;
+      background-color: white;
+    }
+    /*la etiqueta seleccionada con fondo azul un poco mas oscuro*/
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{
+      background-color: #4c7ec1;
+    }
+
+    .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+/*letra de las etiquetas mostradas en el header*/
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+/*Fondo del dropdown seleccionado*/
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #4c7ec1;
+}
+
+/*texto que no es pestaña del menu en blanco*/
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+
+#label {
+  float: left; 
+  font-weight: bold;
+  width: 120px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+#info-person{
+  background-color: #ffffff;
+  position: fixed;
+  margin-left: 3%;
+  float:left;
+  width: 22%;
+  margin-top: 10%;
+  border-width: 3;
+  font-size: 17px; 
+}
+
+#panel-central{
+  margin-left: 10%;
+  width: 80%;
+  float:left;
+  margin-top: 3%;
+  font-size: 17px; 
+}
+
+#listaBotones{
+  margin-left: 45%;
+  width: 80%;
+  float:left;
+  font-size: 17px; 
+}
+
+#tabla-tesis{
+  margin-left: 10%;
+  width: 80% !important;
+  float:left;
+  margin-right: 10%;
+}
+
+#tag{
+  display: inline;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+#row{
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 0.5%;
+}
+
+.fillbox{
+  display: inline;
+  margin-left: 0.5%;
+}
+
+
+.panel{
+  background-color: #efefef;
+}
+
+table{
+  background-color: #ffffff;
+}
+body{
+  background-color: #e5e5e5;
+}
+
+#tesis{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: #efefef;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+/*Quitar borde encima de la tabla*/
+.mdl-grid{
+      padding: 0px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<!--Menu superior-->
+<nav class="navbar navbar-default navbar-inverse" style="background-color: #609ef2;border-color: #e5e5e5;position: fixed;width: 100%;float: top;" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img src="https://i.imgur.com/sH4wzX9.png" style="width: 40px;height: 40px;margin-top: -10px;"> Genealogy tree</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/searchData">Buscar datos</a></li>
+        <li style="display: none;" id="liMP"><a href="/doctor">Mi perfil</a></li>
+        <li style="display: none;" class="active" id="liID"><a href="/submitData">Insertar Datos</a></li>
+        <li style="display: none;" id="liA"><a href="/admin">Panel Admin</a></li>
+      </ul>
+      
+      <div id="sesionIniciada"> 
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li><p class="navbar-text">¿Quieres iniciar sesión o registrate?</p></li>
+          <li><a href="/login" style="font-weight: bold;text-decoration: underline;">Acceder</a></li>
+        </ul>
+      </div>
+      <div id="sesionCerrada" style="display: none;">  
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li onclick="logOut();"><a href="" style="font-weight: bold;text-decoration: underline;">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div id="panel-central">
+  <div class="panel-default panel"  style="margin-top: 7%;">
+    <div id="title" style="text-align: center;margin-left: 2%;margin-top: 2%;font-weight: bold;font-size: x-large;">Bienvenido a la pagina de edición de datos!</div>
+    <div id="title" style="text-align: center;margin-left: 2%;margin-top: 0.5%;">Desde esta interfaz usted podrá añadir o modificar la información ya existente en nuestra base de datos para mantener nuestro sistema lo mas actualizado posibles</div>
+    <hr style="margin-top: 2%;margin-bottom: 0%;">
+    </div>
+</div>
+
+<ul class="nav nav-tabs" id="panel-central" >
+  <li id="lit"><a id="btntesis" href="#">Tesis</a></li>
+  <li id="lid" class="active"><a id="btndoctor" href="#">Doctor</a></li>
+</ul>
+<div id="panel-central" style="margin-top: 0%;display: block;">
+  <div class="panel-default panel"  style="background-color: white;float: left;width: 100%;margin-top: 0%;"  >
+
+    
+    <div id="subTes" style="display: none;"> 
+      <br>
+      <div id="msgTExito" style="display: none;margin-left: 5%;"><p style="color: green;">
+      Se han insertado los datos correctamente.<br> 
+      Para que estos cambios se vean reflejados en el sistema, deben ser confirmados antes por nuestro personal.<br>
+      Por favor, tenga paciencia</p></div>
+      <div id="msgTFracaso" style="display: none;"><p style="color: red;">Ha habido un error. Por favor, revise el formato de los datos</p></div>
+      <div id="label">Titulo: </div><input type="text" style="width: 80%;margin-bottom: 0.5%;" id="tituloTesis" value=""></textarea><br>
+      <div id="label">Fecha: </div><input type="text" placeholder="mm/dd/yyyy" id="datepicker" value="">
+      <div style="margin-top: 0.5%;"><div id="label">Institucion: </div><input type="text"  readonly onclick="abrirSeleccionInstitucion();" id="institucionTesis" value=""><br></div>
+      <div style="margin-top: 0.5%;"><div id="label">Departamento: </div><input type="text"  id="departmentTesis" value=""><br></div>
+      <div style="margin-top: 0.5%;"><div id="label">Url: </div><input type="text"  id="urlTesis" value=""><br></div>
+      <div style="margin-top: 0.5%;"><div id="label">Resumen: </div><textarea id="abstractTesis" cols="80" rows="5"></textarea> <br></div>  
+    
+      <div style="float: left;">
+        <div style="margin-top: 5%;"><div id="label">Lector: </div><input type="text" id="lector" value="" readonly onclick="abrirSeleccionDoctor(1);" ><br></div>
+        <div style="margin-top: 2%;"><div id="label">Director: </div><input type="text" id="director" value="" readonly onclick="abrirSeleccionDoctor(2);"><br></div>
+        <div style="margin-top: 2%;"><div id="label">Codirector 1: </div><input type="text" id="codirector" value="" readonly  onclick="abrirSeleccionDoctor(3);"> <br></div>
+        <div style="margin-top: 2%;"><div id="label">Codirector 2: </div><input type="text" id="codirector2" value="" readonly  onclick="abrirSeleccionDoctor(4);"> <br></div>
+
+        <a class="btn icon-btn btn-success" onclick="insertarTesis();" style="margin-left: 50%;margin-top: 4%;margin-bottom: 3%;" href="#">
+              <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+              Editar
+              </a>
+      </div>
+
+    <div style="float: right;margin-right: 10%;margin-bottom: 2%">
+      <div style="margin-top: 5%;"><div id="label">Jurado: </div><input type="text" id="jurado1" value="" readonly onclick="abrirSeleccionDoctor(5);"><br></div>
+      <div style="margin-top: 2%;"><div id="label">Jurado: </div><input type="text" id="jurado2" value="" readonly onclick="abrirSeleccionDoctor(6);"><br></div>
+      <div style="margin-top: 2%;"><div id="label">Jurado: </div><input type="text" id="jurado3" value="" readonly onclick="abrirSeleccionDoctor(7);"><br></div>
+      <div style="margin-top: 2%;"><div id="label">Jurado: </div><input type="text" id="jurado4" value="" readonly onclick="abrirSeleccionDoctor(8);"><br></div>
+      <div style="margin-top: 2%;"><div id="label">Jurado: </div><input type="text" id="jurado5" value="" readonly onclick="abrirSeleccionDoctor(9);"><br></div>
+    </div>
+    </div>
+
+    <div id="subUsu" > 
+    <div style="float: left;margin-bottom: 3%;margin-top: 2%;">
+      <div id="msgUExito" style="display: none;margin-left: 5%;"><p style="color: green;">
+      Se han insertado los datos correctamente.<br> 
+      Para que estos cambios se vean reflejados en el sistema, deben ser confirmados antes por nuestro personal.<br>
+      Por favor, tenga paciencia</p></div>
+      <div id="msgUFracaso" style="display: none;"><p style="color: red;">Ha habido un error. Por favor, revise el formato de los datos</p></div>
+      <div style="margin-top: 1%;"><div id="label">Nombre: </div><input type="text" id="nombre" value="" ><br></div>
+      <div style="margin-top: 1%;"><div id="label">Apellidos: </div><input type="text" id="apellidos" value=""><br></div>
+      <div style="margin-top: 1%;"><div id="label">Orcid ID: </div><input type="text" id="orcid" value=""><br></div>
+      <div style="margin-top: 1%;"><div id="label">Nacimiento: </div><input type="text" placeholder="dd/mm/yyyy" id="datepicker-nacimiento" value=""><br></div>
+      <div style="margin-top: 2%;"><div id="label">Homepage: </div><input type="text" id="homepage" value=""><br></div>   
+      <a class="btn icon-btn btn-success" onclick="insertarDoctorD(1);" style="margin-left: 50%;margin-top: 3%;" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+            Insertar
+            </a>
+    </div>
+
+    </div>
+    </div>
+
+
+<!-- The Modal -->
+<div id="ventanaSeleccion" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 60%;">
+    <div class="modal-header">
+          <button type="button" id="btnCloseSeleccionar" class="close" data-target="#ventanaSeleccion" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Seleccionar Doctor</h4>
+    </div>
+    
+    <div style="margin-top: 1%;">
+      <div style="width: 60%;display: inline-block;margin-left: 2%;">
+        <input type="text"  id="cajaBuscarDoctor" class="form-control" placeholder="Buscar persona">
+        
+      </div>
+      <div class="form-group" style="display:inline-block;">
+        <select class="form-control" id="selTipoBusqueda">
+          <option>Nombre</option>
+          <option>Apellidos</option>
+          <option>Apellidos, Nombre</option>
+        </select>
+      </div>
+      <div style="display:inline-block;">
+        <button type="button" onclick="buscarDoctor();" class="btn btn-info btn-md" id="myBtn2">Buscar</button>
+      </div>
+    </div>
+
+      
+
+    <table id="tablaDoctores" class="mdl-data-table cell-border" style="width:100%;margin-top: 0px;">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Año nacimiento</th>
+                    <th>Orcid</th>
+                    <th>Pagina Web</th>
+                    <th>Id</th>
+                </tr>
+            </thead>
+        </table>
+        <a class="btn icon-btn btn-success" onclick="abrirFormDoctor();" style="margin-left: 2%;" href="#">
+      <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+      Insertar nuevo doctor
+      </a>
+      <a class="btn icon-btn btn-danger" onclick="borrarSeleccion();" ><span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>Delete</a>
+  </div>
+</div>
+
+<!-- Dialogo de creacion de usuario -->
+<div id="ventanaInsertar" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 30%;">
+    
+        <div class="modal-header">
+          <button type="button" id="btnCloseInsertar" class="close" data-target="#ventanaInsertar" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Insertar Doctor</h4>
+        </div>
+
+      <div class="modal-body">
+            <div style="margin-top: 1%;"><div id="label">Nombre: </div><input type="text" id="nombreV" value="" onclick=""><br></div>
+            <div style="margin-top: 1%;"><div id="label">Apellidos: </div><input type="text" id="apellidosV" value=""><br></div>
+            <div style="margin-top: 1%;"><div id="label">Orcid ID: </div><input type="text" id="orcidV" value=""><br></div>
+            <div style="margin-top: 2%;margin-bottom: 2%;"><div id="label">Homepage: </div><input type="text" id="homepageV" value=""><br></div>
+            <div id="msgExito" style="display: none;"><p style="color: green;">Se han insertado los datos correctamente</p></div>
+            <div id="msgFracaso" style="display: none;"><p style="color: red;">Ha habido un error. Por favor, revise el formato de los datos</p></div>
+            <a class="btn icon-btn btn-success" onclick="insertarDoctor(1);" style="margin-left: 2%;" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+            Insertar
+            </a>
+            
+        </div>
+  </div>
+</div>
+
+
+<!-- The Modal -->
+<div id="modalInstitucion" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 60%;">
+    <div class="modal-header">
+          <button type="button" id="btnCloseSeleccionarI" class="close" data-target="#modalInstitucion" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Seleccionar Institucion</h4>
+    </div>
+    
+    <div style="margin-top: 1%;">
+      <div style="width: 60%;display: inline-block;margin-left: 2%;">
+        <input type="text"  id="cajaBuscarInstitucion" class="form-control" placeholder="Buscar Institucion">
+        
+      </div>
+      <div style="display:inline-block;">
+        <button type="button" onclick="buscarInstitucion();" class="btn btn-info btn-md" id="myBtn2">Buscar</button>
+      </div>
+    </div>
+
+      
+
+    <table id="tablaInstituciones" class="mdl-data-table cell-border" style="width:100%;margin-top: 0px;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Url</th>
+                </tr>
+            </thead>
+        </table>
+        <a class="btn icon-btn btn-success" onclick="abrirFormInstitucion();" style="margin-left: 2%;" href="#">
+      <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+      Insertar nueva institucion
+      </a>
+      <a class="btn icon-btn btn-danger" onclick="borrarSeleccionI();" ><span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>Delete</a>
+  </div>
+</div>
+
+<!-- Dialogo crear institucion -->
+<div id="modalCrear" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 30%;">
+    
+        <div class="modal-header">
+          <button type="button" id="btnCloseCrearIns" class="close" data-target="#modalCrear" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Crear Institucion</h4>
+        </div>
+
+      <div class="modal-body">
+            <div style="margin-top: 1%;"><div id="label">Nombre: </div><input type="text" id="nombreInsV" value="" onclick=""><br></div>
+            <div style="margin-top: 1%;margin-bottom: 2%;"><div id="label">Url: </div><input type="text" id="urlInsV" value=""><br></div>
+            <div id="msgIExito" style="display: none;"><p style="color: green;">Se han insertado los datos correctamente</p></div>
+            <div id="msgIFracaso" style="display: none;"><p style="color: red;">Ha habido un error. Por favor, revise el formato de los datos</p></div>
+            <a class="btn icon-btn btn-success" onclick="insertarInstitucion(1);" style="margin-left: 2%;" href="#">
+            <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+            Insertar
+            </a>
+            
+        </div>
+  </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+cajaPulsada=0;
+var doctor =0,director=0,codirector=0,codirector2=0,j1=0,j2=0,j3=0,j4=0,j5=0;
+var institucion=0;
+var usuario=0;
+tablaFloat = $('#tablaDoctores').DataTable( {
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false,
+        columnDefs: [
+            /*{
+                targets: [ 0, 1, 2 ],
+                className: 'mdl-data-table__cell--non-numeric'
+            },*/
+            {
+                "targets": [ 4 ],
+                "visible": false
+            }
+        ]
+    });
+
+tablaIns = $("#tablaInstituciones").DataTable( {
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+   //funcion que parsea url para coger parametros
+  function getIdParameter() {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+     var id=0;
+      if(sPageURL!=""){
+        sURLVariables = sPageURL.split('=');
+        id = sURLVariables[1];
+      }
+    return id;
+  }
+  doctor = getIdParameter();
+  getSesion();
+
+    //Si recibimos 1 es que debemos mostrar el usuario de la sesion
+    //Si recibimos 0 es que debemos mostrar el que nos pasan como parametro
+    function getSesion(){
+      var res=0;
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+        },
+        success: function(data){
+          bcook=0;
+
+          if(data && data!=0){
+            //Habilitar botones
+            $("#liMP").css('display','block');
+            $("#liID").css('display','block');
+            $("#sesionIniciada").css('display','none');
+            $("#sesionCerrada").css('display','block');
+            usuario=data.Value;
+            cargarUsuario();
+            if(data==37){
+              $("#liA").show();
+            }
+          }else{
+            window.location.replace("http://localhost:8000/searchData");
+          }
+        }
+      });
+    }
+
+function cargarUsuario(){
+  console.log("entra");
+    $.ajax({
+      url:"/getUsuario?id="+doctor,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log(data);
+        if(data.Name == ""){
+           window.location.replace("http://localhost:8000/searchData");
+        }else{
+          $("#lector").val(data.Name+' '+data.Surname);
+          $("#nombre").val(data.Name);
+          $("#apellidos").val(data.Surname);
+          $("#datepicker-nacimiento").val(data.Birth);
+          $("#orcid").val(data.Orcid);
+          $("#homepage").val(data.Webpage);
+          cargarTesis();
+        }
+      }
+    });
+}
+
+function cargarTesis(){
+    //Cargar tesis
+    $.ajax({
+      url:"/getTesis?id="+doctor,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        if(data.Id!=""){
+          $("#tituloTesis").val(data.Title);
+          $("#datepicker").val(data.DefenseDate);
+          $("#abstractTesis").val(data.Abstract);
+          $("#tag-institucion").text(data.Institution);
+          $("#urlTesis").val(data.Url);
+          getThesisRel(data.Id);
+        }
+      }
+    });
+  }
+
+  function getThesisRel(thesisId){
+   //Cargar direccion de la tesis
+    $.ajax({
+      url:"/getDireccion?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log(data);
+        if(data.length==3){
+          director = data[0].Id;
+          $("#director").val(data[0].Name+' '+data[0].Surname);
+          codirector = data[1].Id;
+          $("#codirector").val(data[1].Name+' '+data[1].Surname);
+          codirector2 = data[2].Id;
+          $("#codirector2").val(data[2].Name+' '+data[2].Surname);
+        }else if (data.length==2) {
+          director = data[0].Id;
+          $("#director").val(data[0].Name+' '+data[0].Surname);
+          codirector = data[1].Id;
+          $("#codirector").val(data[1].Name+' '+data[1].Surname);
+        }else if (data.length==1) {
+          director = data[0].Id;
+          $("#director").val(data[0].Name+' '+data[0].Surname);
+        }
+      }
+    });
+    
+    //Cargar jurado de la tesis
+    $.ajax({
+      url:"/getJurado?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        if(data.length==5){
+          j1 = data[0].Id;
+          $("#jurado1").val(data[0].Name+' '+data[0].Surname);
+          j2 = data[1].Id;
+          $("#jurado2").val(data[1].Name+' '+data[1].Surname);
+          j3 = data[2].Id;
+          $("#jurado3").val(data[2].Name+' '+data[2].Surname);
+          j4 = data[3].Id;
+          $("#jurado4").val(data[3].Name+' '+data[3].Surname);
+          j5 = data[4].Id;
+          $("#jurado5").val(data[4].Name+' '+data[4].Surname);
+        }else if (data.length==4) {
+          j1 = data[0].Id;
+          $("#jurado1").val(data[0].Name+' '+data[0].Surname);
+          j2 = data[1].Id;
+          $("#jurado2").val(data[1].Name+' '+data[1].Surname);
+          j3 = data[2].Id;
+          $("#jurado3").val(data[2].Name+' '+data[2].Surname);
+          j4 = data[3].Id;
+          $("#jurado4").val(data[3].Name+' '+data[3].Surname);
+        }else if (data.length==3) {
+          j1 = data[0].Id;
+          $("#jurado1").val(data[0].Name+' '+data[0].Surname);
+          j2 = data[1].Id;
+          $("#jurado2").val(data[1].Name+' '+data[1].Surname);
+          j3 = data[2].Id;
+          $("#jurado3").val(data[2].Name+' '+data[2].Surname);
+        }else if (data.length==2) {
+          j1 = data[0].Id;
+          $("#jurado1").val(data[0].Name+' '+data[0].Surname);
+          j2 = data[1].Id;
+          $("#jurado2").val(data[1].Name+' '+data[1].Surname);
+        }else if (data.length==1) {
+          j1 = data[0].Id;
+          $("#jurado1").val(data[0].Name+' '+data[0].Surname);
+        }
+      }
+    });
+
+    //Cargar keywords de la tesis
+    $.ajax({
+      url:"/getKeywords?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $("#tag-keywords").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-keywords").append(data[i].Word+", ");
+        }
+      }
+    });
+  }
+
+function abrirSeleccionInstitucion(){
+  $("#modalInstitucion").css('display',"block");
+}
+
+function abrirSeleccionDoctor(caja){
+  cajaPulsada=caja;
+  $("#ventanaSeleccion").css('display',"block");
+}
+
+function abrirFormDoctor(){
+  $("#ventanaInsertar").css('display',"block");
+}
+
+function abrirFormInstitucion(){
+  $("#modalCrear").css('display',"block");
+}
+
+function borrarSeleccion(){
+  switch (cajaPulsada){
+          case 1 :
+            $("#lector").val("");
+            lector=0;
+            break;
+          case 2 :
+            $("#director").val("");
+            director=0;
+            break;
+          case 3 :
+            $("#codirector").val("");
+            codirector=0;
+            break;           
+          case 4 :
+            $("#codirector2").val("");
+            codirector2=0;
+            break;           
+          case 5 :
+            $("#jurado1").val("");
+            j1=0;
+            break;
+          case 6 :
+            $("#jurado2").val("");
+            j2=0;
+            break;
+          case 7 :
+            $("#jurado3").val("");
+            j3=0;
+            break;
+          case 8 :
+            $("#jurado4").val("");
+            j4=0;
+            break;
+          case 9 :
+            $("#jurado5").val("");
+            j5=0;
+            break;
+        }
+        $("#ventanaSeleccion").css('display',"none");
+
+}
+
+  var id;
+  tablaTes = $('#tabla-tesis').DataTable({
+    "bFilter":false,
+        "bInfo":false,
+        "paging": false,
+        "autoWidth": false,
+  });
+
+  $("#datepicker-nacimiento").datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd/mm/yy',
+      yearRange: "-100:+0"
+    });
+
+  $("#datepicker").datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd/mm/yy',
+      yearRange: "-500:+0"
+    });
+
+  $("#btntesis").on('click',function(){
+    $("#subUsu").css('display','none');
+    $("#subTes").css('display','block');
+    $("#lit").addClass("active");
+    $("#lid").removeClass();
+  });
+
+
+  $("#btndoctor").on('click',function(){
+    $("#subUsu").css('display','block');
+    $("#subTes").css('display','none');
+    $("#lid").addClass("active");
+    $("#lit").removeClass();
+  });
+
+  //funcion que parsea url para coger parametros
+  function getIdParameter() {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+     var id=0;
+      if(sPageURL!=""){
+        sURLVariables = sPageURL.split('=');
+        id = sURLVariables[1];
+      }
+    return id;
+  }
+
+  function filtrarFecha(dateS){
+    elems = dateS.split(/-|T/);
+    return elems[2]+"/"+elems[1]+"/"+elems[0];
+  }
+
+function insertarDoctor(bitType){
+  nombre = $("#nombreV").val();
+  apellidos = $("#apellidosV").val();
+  orcid = $("#orcidV").val();
+  nacimiento = $("#datepicker-nacimientoV").val();
+  pagina = $("#homepageV").val();
+
+  $.ajax({
+        url:"/editUser",
+        data: { 
+            'nombre': nombre,
+            'apellidos': apellidos,
+            'orcid': orcid,
+            'pagina': pagina,
+            'bitType': bitType,
+            'doctor': doctor,
+            'creador': usuario
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+
+          nombre = $("#nombreV").val("");
+          apellidos = $("#apellidosV").val("");
+          orcid = $("#orcidV").val("");
+          nacimiento = $("#datepicker-nacimientoV").val("");
+          pagina = $("#homepageV").val("");
+          $("#msgExito").show();
+        }
+      });
+}
+
+function insertarDoctorD(bitType){
+  nombre = $("#nombre").val();
+  apellidos = $("#apellidos").val();
+  orcid = $("#orcid").val();
+  nacimiento = $("#datepicker-nacimiento").val();
+  pagina = $("#homepage").val();
+
+  $.ajax({
+        url:"/editUser",
+        data: { 
+            'nombre': nombre,
+            'apellidos': apellidos,
+            'orcid': orcid,
+            'pagina': pagina,
+            'bitType': bitType,
+            'doctor': doctor,
+            'fecha': nacimiento
+        },
+        type: "POST",
+        error: function(x,t,m){
+          console.log(x);
+          console.log(t);
+          console.log(m);
+        },
+        success: function(data){
+          $("#msgUExito").show();
+          nombre = $("#nombre").val("");
+          apellidos = $("#apellidos").val("");
+          orcid = $("#orcid").val("");
+          nacimiento = $("#datepicker-nacimiento").val("");
+          pagina = $("#homepage").val("");
+        }
+      });
+}
+
+function buscarDoctor(){
+  //Cuidado con los espacios detras y delante
+  tipo = $("#selTipoBusqueda option:selected").text();
+  nombre,apellidos;
+
+  if(tipo=="Nombre"){
+    nombre = $("#cajaBuscarDoctor").val();
+    apellidos="";
+
+  }else if(tipo=="Apellidos"){
+    apellidos = $("#cajaBuscarDoctor").val();
+    nombre = "";
+  }else{
+    cadena = $("#cajaBuscarDoctor").val();
+    palabras = cadena.split(',');
+    apellidos = palabras[0];
+    nombre = palabras[1];
+  }
+
+  nombre = nombre.trim();
+  nombre = nombre.toLowerCase();
+  apellidos = apellidos.trim();
+  apellidos = apellidos.toLowerCase();
+  //Buscar doctores
+  $.ajax({
+    url:"/searchUsuarios?nombre="+nombre+"&apellidos="+apellidos,
+    type: "GET",
+    error: function(x,t,m){
+      console.log(x);
+    },
+    success: function(data){
+      console.log(data);
+      tablaFloat.clear();
+      var i
+      for(i=0;i<data.length;i++){
+        tablaFloat.row.add( [data[i].Name+" "+data[i].Surname,data[i].Birth,data[i].Orcid,data[i].Webpage,data[i].Id]).draw(true);
+      }
+    }
+  });
+}
+
+function buscarInstitucion(){
+  //Cuidado con los espacios detras y delante
+  nombre = $("#cajaBuscarInstitucion").val();
+
+  nombre = nombre.trim();
+  nombre = nombre.toLowerCase();
+
+  //Buscar institucion
+  $.ajax({
+    url:"/searchInstituciones?nombre="+nombre,
+    type: "GET",
+    error: function(x,t,m){
+      console.log(x);
+    },
+    success: function(data){
+      tablaFloat.clear();
+      var i
+      for(i=0;i<data.length;i++){
+        tablaIns.row.add( [data[i].Id,data[i].Nombre,data[i].Url]).draw(true);
+      }
+    }
+  });
+}
+
+$("#btnCloseSeleccionar").on('click',function(){
+  $("#ventanaSeleccion").css('display',"none");
+});
+
+$("#btnCloseSeleccionarI").on('click',function(){
+  $("#modalInstitucion").css('display',"none");
+});
+
+$("#btnCloseInsertar").on('click',function(){
+  $("#ventanaInsertar").css('display',"none");
+  $("#msgExito").hide();
+  $("#msgFracaso").hide();
+});
+
+$("#btnCloseCrearIns").on('click',function(){
+  $("#modalCrear").css('display',"none");
+  $("#msgIExito").hide();
+  $("#msgIFracaso").hide();
+});
+
+$('#tablaDoctores tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            tablaFloat.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+        switch (cajaPulsada){
+          case 1 :
+            $("#lector").val(tablaFloat.row('.selected').data()[0]);
+            lector=tablaFloat.row('.selected').data()[4];
+            break;
+          case 2 :
+            $("#director").val(tablaFloat.row('.selected').data()[0]);
+            director=tablaFloat.row('.selected').data()[4];
+            break;
+          case 3 :
+            $("#codirector").val(tablaFloat.row('.selected').data()[0]);
+            codirector=tablaFloat.row('.selected').data()[4];
+            break;
+          case 4 :
+            $("#codirector2").val(tablaFloat.row('.selected').data()[0]);
+            codirector2=tablaFloat.row('.selected').data()[4];
+            break;
+          case 5 :
+            $("#jurado1").val(tablaFloat.row('.selected').data()[0]);
+            j1=tablaFloat.row('.selected').data()[4];
+            break;
+          case 6 :
+            $("#jurado2").val(tablaFloat.row('.selected').data()[0]);
+            j2=tablaFloat.row('.selected').data()[4];
+            break; 
+          case 7 :
+            $("#jurado3").val(tablaFloat.row('.selected').data()[0]);
+            j3=tablaFloat.row('.selected').data()[4];
+            break;
+          case 8 :
+            $("#jurado4").val(tablaFloat.row('.selected').data()[0]);
+            j4=tablaFloat.row('.selected').data()[4];
+            break;
+          case 9 :
+            $("#jurado5").val(tablaFloat.row('.selected').data()[0]);
+            j5=tablaFloat.row('.selected').data()[4];
+            break;
+        }
+        $("#ventanaSeleccion").css('display',"none");
+        $("#tablaDoctores").dataTable().fnClearTable();
+        $("#cajaBuscarDoctor").val("");
+    } );
+
+$('#tablaInstituciones tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            tablaIns.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+
+        $("#institucionTesis").val(tablaIns.row('.selected').data()[1]);
+        institucion=tablaIns.row('.selected').data()[0];
+        $("#modalInstitucion").css('display',"none");
+});
+
+function insertarTesis(){
+  titulo = $("#tituloTesis").val();
+  fecha  = $("#datepicker").val();
+  urlp = $("#urlTesis").val();
+  abstract= $("#abstractTesis").val();
+  department = $("#departmentTesis").val();
+  console.log(titulo,fecha,urlp,abstract,department,institucion,doctor);
+  $.ajax({
+        url:"/editarTesis",
+        data: { 
+            'titulo': titulo,
+            'fecha': fecha,
+            'url': urlp,
+            'abstract': abstract,
+            'lector': doctor,
+            'departamento': department,
+            'institucion': institucion
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgTFracaso").show();
+        },
+        success: function(data){
+          $("#msgTExito").show();
+          insertarDirectores(data);
+          insertarJurado(data);
+        }
+      });
+}
+
+function insertarDirectores(id){
+  idTesis = id;
+
+  $.ajax({
+        url:"/insertDoctores",
+        data: { 
+            'director': director,
+            'codirector':codirector,
+            'codirector2': codirector2,
+            'tesis': id,
+        },
+        type: "POST",
+        error: function(x,t,m){
+          console.log(x);
+          console.log(t);
+          console.log(m);
+        },
+        success: function(data){
+          
+        }
+      });
+}
+
+function insertarJurado(id){
+  idTesis = id;
+
+  $.ajax({
+        url:"/insertJurado",
+        data: { 
+            'j1': j1,
+            'j2': j2,
+            'j3': j3,
+            'j4': j4,
+            'j5': j5,
+            'tesis': idTesis,
+        },
+        type: "POST",
+        error: function(x,t,m){
+          console.log(x);
+          console.log(t);
+          console.log(m);
+        },
+        success: function(data){
+          
+        }
+      });
+}
+
+function insertarInstitucion(b){
+  if(b==0){
+    nombre = $("#nombreInstitucion").val();
+    url  = $("#urlInstitucion").val();
+  }else{
+    nombre = $("#nombreInsV").val();
+    url  = $("#urlInsV").val();
+  }
+
+  $.ajax({
+        url:"/insertInstitucion",
+        data: { 
+            'nombre': nombre,
+            'url': url
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgIFracaso").show();
+        },
+        success: function(data){
+          $("#msgIExito").show();
+          $("#nombreInsV").val("");
+          $("#urlInsV").val("");
+        }
+      });
+}
+
+function logOut(){
+    $.ajax({
+      url:"/closeSession",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log("Ha cerrado sesion");
+      }
+      
+    });
+  }
+</script>
+
+
+</body>
+</html>

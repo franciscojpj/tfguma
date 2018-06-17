@@ -1,0 +1,1583 @@
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ 
+
+  <!--script src="//code.jquery.com/jquery-1.11.1.min.js"></script-->
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  
+  <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+     #mynetwork {
+      margin-left: 30%;
+      float:right;
+      margin-right: 40%;
+      margin-top: 1%;
+      width: 25%;
+      height: 150px;
+      border: 1px solid lightgray;
+      background-color: white;
+    }
+    /*la etiqueta seleccionada con fondo azul un poco mas oscuro*/
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{
+      background-color: #4c7ec1;
+    }
+
+    .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+/*letra de las etiquetas mostradas en el header*/
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+/*Fondo del dropdown seleccionado*/
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #fff;
+    background-color: #4c7ec1;
+}
+
+/*texto que no es pestaña del menu en blanco*/
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+
+
+
+#info-person{
+  background-color: #ffffff;
+  position: fixed;
+  margin-left: 3%;
+  float:left;
+  width: 22%;
+  margin-top: 10%;
+  border-width: 3;
+  font-size: 17px; 
+}
+
+#panel-central{
+  margin-left: 10%;
+  width: 80%;
+  float:left;
+  margin-top: 3%;
+  font-size: 17px; 
+}
+
+#listaBotones{
+  margin-left: 45%;
+  width: 80%;
+  float:left;
+  font-size: 17px; 
+}
+
+#tabla-tesis{
+  margin-left: 10%;
+  width: 80% !important;
+  float:left;
+  margin-right: 10%;
+}
+
+#tag{
+  display: inline;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+
+.fillbox{
+  display: inline;
+  margin-left: 0.5%;
+}
+
+
+.panel{
+  background-color: #efefef;
+}
+
+table{
+  background-color: #ffffff;
+}
+body{
+  background-color: #e5e5e5;
+}
+
+#tesis{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: #efefef;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+/*Quitar borde encima de la tabla*/
+.mdl-grid{
+      padding: 0px;
+    }
+
+  .form-control{
+    display: inline-block;
+    width: 80%;
+  }
+
+  #tipoBusquedaAutor{
+    width: 19%;
+  }
+
+  #label{
+    float: left;
+    width: 10%;
+    text-align: right;
+    margin-right: 1%;
+  }
+  label {
+  display: inline-block;
+  width: 120px;
+  text-align: right;
+}​
+
+
+
+  #row {
+  width: 100%;
+  margin-top: 1%;
+  text-align: left;
+
+}
+
+thead {
+  display:none;
+}
+
+#tablaUsNew{
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+ #tablaUsEdit {
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+#tablaTesNew{
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+#tablaTesEdit{
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+
+#tablaTesDel{
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+
+#tablaUsDel{
+  border-bottom-color: white;
+
+  border-bottom: 0px solid #111;
+}
+
+
+th, td {
+    padding: 0.25%;
+}
+</style>
+</head>
+
+<body>
+
+<!--Menu superior-->
+<nav class="navbar navbar-default navbar-inverse" style="background-color: #609ef2;border-color: #e5e5e5;position: fixed;width: 100%;float: top;" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img src="https://i.imgur.com/sH4wzX9.png" style="width: 40px;height: 40px;margin-top: -10px;"> Genealogy tree</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="/searchData">Buscar datos</a></li>
+        <li style="display: none;" id="liMP"><a href="/doctor">Mi perfil</a></li>
+        <li style="display: none;" id="liID"><a href="/submitData">Insertar Datos</a></li>
+        <li class="active" id="liID"><a href="/admin">Panel Admin</a></li>
+      </ul>
+      
+      <div id="sesionIniciada"> 
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li><p class="navbar-text">¿Quieres iniciar sesión o registrate?</p></li>
+          <li><a href="/login" style="font-weight: bold;text-decoration: underline;">Acceder</a></li>
+        </ul>
+      </div>
+      <div id="sesionCerrada" style="display: none;">  
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/faq"><span class="glyphicon glyphicon-question-sign">FAQ</span></a></li>
+          <li onclick="logOut();"><a href="" style="font-weight: bold;text-decoration: underline;">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="panel-central" style="margin-top: 7%;display: block;">
+  <div class="panel-default panel"  style="background-color: white;float: left;width: 100%;margin-top: 0%;"  >
+    <div id="contentTesis" style="margin-top: 2%;margin-bottom: 2%;">
+    <table id="tabla-tesis" style="width:90%;margin-left: 5%;margin-right: 5%;text-align: right;" >
+      <tr>
+        <th style="width: 17%;"></th>
+        <th style="width: 25%;">Original</th> 
+        <th style="width: 6%;"></th>
+        <th style="width: 17%;"></th>
+        <th style="width: 25%;" class="derecha">Editado</th> 
+      </tr>
+      <tr>
+        <td>Titulo:</td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrTitulo"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnTitulo" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Titulo:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdTitulo"></td> 
+      </tr>
+      <tr>
+        <td>Abstract:</td>
+        <td><textarea style="width: 100%;height: 100px;" id="teOrAbstract"></textarea></td>  
+        <td class="derecha" style="text-align: center;"><button id="btnAbstract" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Abstract:</td>
+        <td class="derecha"><textarea style="width: 100%;height: 100px;" id="teEdAbstract"></textarea></td> 
+      </tr>
+      <tr>
+        <td>Fecha Lectura:</td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrFecha"></td> 
+        <td class="derecha" style="text-align: center;"><button  id="btnLectura" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Fecha Lectura:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdFecha"></td> 
+      </tr>
+      <tr>
+        <td>Departamento:</td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrDepartamento"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnDepartamento" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Departamento:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdDepartamento"></td> 
+      </tr>
+      <tr>
+        <td>Institucion:</td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrInstitucion"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnInstitucion" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Institucion:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdInstitucion"></td> 
+      </tr>
+      <tr>
+        <td>URL:</td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrUrl"></td> 
+        <td class="derecha" style="text-align: center;" ><button id="btnUrl" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">URL:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdUrl"></td> 
+      </tr>
+      <tr>
+        <td>Direccion:</td>
+        <td><input onclick="abrirSeleccionDoctor(1);" type="text" style="width: 100%;" name="" id="teOrDir1"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnD1" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Direccion:</td>
+        <td class="derecha"><input onclick="abrirSeleccionDoctor(4);" type="text" style="width: 100%;" name="" id="teEdDir1"></td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td><input onclick="abrirSeleccionDoctor(2);" type="text" style="width: 100%;" name="" id="teOrDir2"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnD2" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha"></td>
+        <td class="derecha"><input onclick="abrirSeleccionDoctor(5);" type="text" style="width: 100%;" name="" id="teEdDir2"></td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td><input onclick="abrirSeleccionDoctor(3);" type="text" style="width: 100%;" name="" id="teOrDir3"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnD3" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha"></td>
+        <td class="derecha"><input onclick="abrirSeleccionDoctor(6);" type="text" style="width: 100%;" name="" id="teEdDir3"></td> 
+      </tr>
+      <tr>
+        <td>Tribunal:</td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrTri1"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnJ1" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Tribunal:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdTri1"></td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrTri2"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnJ2" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha"></td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdTri2"></td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrTri3"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnJ3" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha"></td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdTri3"></td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrTri4"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnJ4" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha"></td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdTri4"></td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="text" style="width: 100%;" name="" id="teOrTri5"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnJ5" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha"></td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="teEdTri5"></td> 
+      </tr>
+      <tr>
+        <td style="text-align: center;"></td> 
+        <td style="text-align: center;"><button style="margin-bottom: 3%;margin-top: 2%; margin-right: 3%;" onclick="eliminarTesisOriginal();" class="btn btn-danger btn-xl" ></i> Eliminar dato </button> <button style="margin-bottom: 3%;margin-top: 2%;" class="btn btn-primary btn-xl" onclick="guardarTesis();"></i> Editar Tesis </button></td> 
+        <td class="derecha" ></td>
+        <td class="derecha"></td>
+        <td class="derecha" style="text-align: center;"><button onclick="eliminarTesis();" class="btn btn-danger btn-xl" ></i> Cancelar modificacion </button></td> 
+      </tr>
+    </table>
+    <table id="tabla-usuario" style="width:90%;margin-left: 5%;margin-right: 5%;text-align: right;" >
+      <tr>
+        <th style="width: 17%;"></th>
+        <th style="width: 25%;"></th> 
+        <th style="width: 6%;"></th>
+        <th style="width: 17%;"></th>
+        <th style="width: 25%;" class="derecha">Editado</th> 
+      </tr>
+      <tr>
+        <td>Nombre:</td>
+        <td><input type="text" style="width: 100%;" name="" id="usOrNombre"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnNombre" class="btn btn-sm" ></i> << </button></td>
+        <td class="derecha">Nombre:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="usEdNombre"></td> 
+      </tr>
+       <tr>
+        <td>Apellidos:</td>
+        <td><input type="text" style="width: 100%;" name="" id="usOrApellidos"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnApellidos" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Apellidos:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="usEdApellidos"></td> 
+      </tr>
+      <tr>
+        <td>Fecha Nacimiento:</td>
+        <td><input type="text" style="width: 100%;" name="" id="usOrFecha"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnNacimiento" class="btn btn-sm" ></i> << </button></td>
+        <td class="derecha">Fecha Nacimiento:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="usEdFecha"></td> 
+      </tr>
+      <tr>
+        <td>Orcid:</td>
+        <td><input type="text" style="width: 100%;" name="" id="usOrOrcid"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnOrcid" class="btn  btn-sm" ></i> << </button></td>
+        <td class="derecha">Orcid:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="usEdOrcid"></td> 
+      </tr>
+      <tr>
+        <td>Pagina web:</td>
+        <td><input type="text" style="width: 100%;" name="" id="usOrPagina"></td> 
+        <td class="derecha" style="text-align: center;"><button id="btnHomepage" class="btn btn-primary btn-sm" ></i> << </button></td>
+        <td class="derecha">Pagina web:</td>
+        <td class="derecha"><input type="text" style="width: 100%;" name="" id="usEdPagina"></td> 
+      </tr>
+      <tr>
+        <td ></td> 
+        <td style="text-align: center;"><button style="margin-bottom: 3%;margin-top: 2%; margin-right: 3%;" onclick="eliminarUsuarioOriginal();" class="btn btn-danger btn-xl" ></i> Eliminar dato </button><button style="margin-bottom: 3%;margin-top: 2%;" onclick="guardarUsuario();" class="btn btn-primary btn-xl" ></i> Confirmar Usuario </button></td> 
+        <td class="derecha"> </td>
+        <td class="derecha"></td>
+        <td class="derecha" style="text-align: center;"><button onclick="eliminarUsuario();" class="btn btn-primary btn-xl" ></i> Cancelar edicion </button></td> 
+      </tr>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div id="panel-central" style="margin-top: 7%;display: block;">
+  <div class="panel-default panel"  style="background-color: white;float: left;width: 100%;margin-top: 0%;"  >
+    <div id="content" style="margin-top: 3%;">
+      <a  onclick="" style="margin-left: 2%;margin-top: 1%;"  href="#">
+            Usuarios creados
+            <span class="glyphicon glyphicon-chevron-down btn-xs"></span>
+      </a>
+      <table id="tablaUsNew" class="display compact" style="width:90%">
+
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+
+                </tr>
+            </thead>
+
+          <tbody>
+          </tbody>
+      </table>
+      <br>
+
+      <a  onclick="" style="margin-left: 2%;margin-top: 1%; margin-bottom: 1%;"  href="#">
+            Usuarios editados
+            <span class="glyphicon glyphicon-chevron-down btn-xs"></span>
+      </a>
+      <table id="tablaUsEdit" class="display compact" style="width:90%">
+
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+
+                </tr>
+            </thead>
+
+          <tbody>
+          </tbody>
+      </table>    
+      <br>
+
+      <a  onclick="" style="margin-left: 2%;margin-top: 1%; margin-bottom: 3% !important;"  href="#">
+            Usuarios eliminados
+            <span class="glyphicon glyphicon-chevron-down btn-xs"></span>
+      </a>
+      <table id="tablaUsDel" class="display compact" style="width:90%">
+
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+
+                </tr>
+            </thead>
+
+          <tbody>
+          </tbody>
+      </table> 
+      <br>
+
+      <a  onclick="" style="margin-left: 2%;margin-top: 1%; margin-bottom: 1%;"  href="#">
+            Tesis creadas
+            <span class="glyphicon glyphicon-chevron-down btn-xs"></span>
+      </a>
+      <table id="tablaTesNew" class="display compact" style="width:90%">
+
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+
+                </tr>
+            </thead>
+
+          <tbody>
+          </tbody>
+      </table> 
+      <br>
+
+      <a  onclick="" style="margin-left: 2%;margin-top: 1%; margin-bottom: 3% !important;"  href="#">
+            Tesis editadas
+            <span class="glyphicon glyphicon-chevron-down btn-xs"></span>
+      </a>
+      <table id="tablaTesEdit" class="display compact" style="width:90%">
+
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+
+                </tr>
+            </thead>
+
+          <tbody>
+          </tbody>
+      </table> 
+      <br>
+
+      <a  onclick="" style="margin-left: 2%;margin-top: 1%; margin-bottom: 3% !important;"  href="#">
+            Tesis eliminadas
+            <span class="glyphicon glyphicon-chevron-down btn-xs"></span>
+      </a>
+      <table id="tablaTesDel" class="display compact" style="width:90%">
+
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 1</th>
+
+                </tr>
+            </thead>
+
+          <tbody>
+          </tbody>
+      </table> 
+      <br>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div id="ventanaSeleccion" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 60%;">
+    <div class="modal-header">
+          <button type="button" id="btnCloseSeleccionar" class="close" data-target="#ventanaSeleccion" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Seleccionar Doctor</h4>
+    </div>
+    
+    <div style="margin-top: 1%;">
+      <div style="width: 60%;display: inline-block;margin-left: 2%;">
+        <input type="text"  id="cajaBuscarDoctor" class="form-control" placeholder="Buscar persona">
+        
+      </div>
+      <div class="form-group" style="display:inline-block;">
+        <select class="form-control" id="selTipoBusqueda">
+          <option>Nombre</option>
+          <option>Apellidos</option>
+          <option>Apellidos, Nombre</option>
+        </select>
+      </div>
+      <div style="display:inline-block;">
+        <button type="button" onclick="buscarDoctor();" class="btn btn-info btn-md" id="myBtn2">Buscar</button>
+      </div>
+    </div>
+
+      
+
+    <table id="tablaDoctores" class="mdl-data-table cell-border" style="width:100%;margin-top: 0px;">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Año nacimiento</th>
+                    <th>Orcid</th>
+                    <th>Pagina Web</th>
+                    <th>Id</th>
+                </tr>
+            </thead>
+        </table>
+        <a class="btn icon-btn btn-success" onclick="abrirFormDoctor();" style="margin-left: 2%;" href="#">
+      <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+      Insertar nuevo doctor
+      </a>
+      <a class="btn icon-btn btn-danger" onclick="borrarSeleccion();" ><span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>Delete</a>
+  </div>
+</div>
+
+<script type="text/javascript"> 
+  var tablaUsEdit,tablaUsNew,tablaTesEdit,tablaTesNew, tablaFloat;
+  var d1o=0,d2o=0,d3o=0,j1o=0,j2o=0,j3o=0,j4o=0,j5o=0;
+  var d1e=0,d2e=0,d3e=0,j1e=0,j2e=0,j3e=0,j4e=0,j5e=0;
+  var institucion=0,institucionEd=0;
+  var usuario=0, tesis=0,usuarioEditado=0,tesisEditada=0;
+  var cajaPulsada=0;
+
+    $(document).ready( function () {
+      leerCookie();
+      cargarTablas();
+      cargarBotones();
+      
+} );
+
+    function leerCookie(){
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+          console.log("Ha habido error");
+        },
+        success: function(data){
+          bcook=0;
+          if(data && data==37){
+            //Habilitar botones
+            $("#liMP").css('display','block');
+            $("#liID").css('display','block');
+            $("#sesionIniciada").css('display','none');
+            $("#sesionCerrada").css('display','block');
+          }else{
+            window.location.replace("http://localhost:8000/searchData");
+          }
+        }
+      });
+    }
+
+function cargarBotones(){
+  $("#btnTitulo").on('click',function(){
+    $("#teOrTitulo").val($("#teEdTitulo").val());
+  });
+
+  $("#btnAbstract").on('click',function(){
+    $("#teOrAbstract").val($("#teEdAbstract").val());
+  });
+
+  $("#btnLectura").on('click',function(){
+    $("#teOrFecha").val($("#teEdFecha").val());
+  });
+
+  $("#btnDepartamento").on('click',function(){
+    $("#teOrDepartamento").val($("#teEdDepartamento").val());
+  });
+
+  $("#btnInstitucion").on('click',function(){
+    institucion=institucionEd;
+    $("#teOrInstitucion").val($("#teEdInstitucion").val());
+  });
+
+  $("#btnUrl").on('click',function(){
+    $("#teOrUrl").val($("#teEdUrl").val());
+  });
+
+  $("#btnD1").on('click',function(){
+    d1o=d1e;
+    $("#teOrDir1").val($("#teEdDir1").val());
+  });
+
+  $("#btnD2").on('click',function(){
+    d2o=d2e;
+    $("#teOrDir2").val($("#teEdDir2").val());
+  });
+
+  $("#btnD3").on('click',function(){
+    d3o=d3e;
+    $("#teEdDir3").val($("#teEdDir3").val());
+  });
+
+  $("#btnJ1").on('click',function(){
+    j1o=j1e;
+    $("#teOrTri1").val($("#teEdTri1").val());
+  });
+
+  $("#btnJ2").on('click',function(){
+    j2o=j2e;
+    $("#teOrTri2").val($("#teEdTri2").val());
+  });
+
+  $("#btnJ3").on('click',function(){
+    j3o=j3e;
+    $("#teOrTri3").val($("#teEdTri3").val());
+  });
+
+  $("#btnJ4").on('click',function(){
+    j4o=j4e;
+    $("#teOrTri4").val($("#teEdTri4").val());
+  });
+
+  $("#btnJ5").on('click',function(){
+    j5o=j5e;
+    $("#teOrTri5").val($("#teEdTri5").val());
+  });
+
+  $("#btnNombre").on('click',function(){
+    $("#usOrNombre").val($("#usEdNombre").val());
+  });
+
+  $("#btnApellidos").on('click',function(){
+    $("#usOrApellidos").val($("#usEdApellidos").val());
+  });
+
+  $("#btnNacimiento").on('click',function(){
+    $("#usOrFecha").val($("#usEdFecha").val());
+  });
+
+  $("#btnOrcid").on('click',function(){
+    $("#usOrOrcid").val($("#usEdOrcid").val());
+  });
+
+  $("#btnHomepage").on('click',function(){
+    $("#usOrPagina").val($("#usEdPagina").val());
+  });
+}
+
+function cargarTablas(){
+  tablaFloat = $('#tablaDoctores').DataTable( {
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false,
+        columnDefs: [
+            /*{
+                targets: [ 0, 1, 2 ],
+                className: 'mdl-data-table__cell--non-numeric'
+            },*/
+            {
+                "targets": [ 4 ],
+                "visible": false
+            }
+        ]
+    });
+
+  tablaUsEdit = $('#tablaUsEdit').DataTable({
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+    tablaUsNew=$('#tablaUsNew').DataTable({
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+    tablaTesEdit=$('#tablaTesEdit').DataTable({
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+    tablaTesNew=$('#tablaTesNew').DataTable({
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+    tablaUsDel = $("#tablaUsDel").DataTable({
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+    tablaTesDel = $("#tablaTesDel").DataTable({
+      "bFilter":false,
+        "bInfo":false,
+        "paging": false
+    });
+
+    getNewTesis();
+    getDelTesis();
+    getEditedTesis();
+    getNewUsuarios();
+    getEditedUsuarios();
+    getDelUsuarios();
+
+
+    $('#tablaDoctores tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            tablaFloat.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+        switch (cajaPulsada){
+          case 1 :
+            $("#teOrDir1").val(tablaFloat.row('.selected').data()[0]);
+            d1o=tablaFloat.row('.selected').data()[4];
+            break;
+          case 2 :
+            $("#teOrDir2").val(tablaFloat.row('.selected').data()[0]);
+            d2o=tablaFloat.row('.selected').data()[4];
+            break;
+          case 3 :
+            $("#teOrDir3").val(tablaFloat.row('.selected').data()[0]);
+            d3o=tablaFloat.row('.selected').data()[4];
+            break;
+          case 4 :
+            $("#teEdDir1").val(tablaFloat.row('.selected').data()[0]);
+            d1e=tablaFloat.row('.selected').data()[4];
+            break;
+          case 5 :
+            $("#teEdDir2").val(tablaFloat.row('.selected').data()[0]);
+            d2e=tablaFloat.row('.selected').data()[4];
+            break;
+          case 6 :
+            $("#teEdDir3").val(tablaFloat.row('.selected').data()[0]);
+            d3e=tablaFloat.row('.selected').data()[4];
+            break; 
+        }
+        $("#ventanaSeleccion").css('display',"none");
+        $("#tablaDoctores").dataTable().fnClearTable();
+        $("#cajaBuscarDoctor").val("");
+    } );
+}
+
+$(".derecha").hide();
+$("#tabla-tesis").hide();
+
+
+ getSesion();
+    //Si recibimos 1 es que debemos mostrar el usuario de la sesion
+    //Si recibimos 0 es que debemos mostrar el que nos pasan como parametro
+    function getSesion(){
+      var res=0;
+      $.ajax({
+        url:"/getIdCookie",
+        type: "GET",
+        error: function(x,t,m){
+        },
+        success: function(data){
+          bcook=0;
+
+          if(data && data.Value!=0){
+            //Habilitar botones
+            $("#liMP").css('display','block');
+            $("#liID").css('display','block');
+            $("#sesionIniciada").css('display','none');
+            $("#sesionCerrada").css('display','block');
+
+          }
+        }
+      });
+    }
+    function guardarTesis(){
+      titulo = $("#teOrTitulo").val();
+      abstract = $("#teOrAbstract").val();
+      fecha = $("#teOrFecha").val();
+      departamento = $("#teOrDepartamento").val();
+      url = $("#teOrUrl").val();
+      $.ajax({
+        url:"/updateTesis",
+        data: { 
+            'titulo': titulo,
+            'abstract': abstract,
+            'fecha': fecha,
+            'departamento': departamento,
+            'institucion': institucion,
+            'url': url,
+            'id': tesis
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+          //Mostrar mensaje de exito
+          if(tesisEditada!=0){
+            eliminarTesis();
+          }
+          eliminarRelaciones();
+        }
+      });
+    }
+
+    function eliminarTesis(){
+      $.ajax({
+        url:"/deleteTesis",
+        data: { 
+            'id': tesisEditada
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+        }
+      });
+    }
+
+    function eliminarTesisOriginal(){
+      $.ajax({
+        url:"/deleteTesis",
+        data: { 
+            'id': tesis
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+        }
+      });
+    }
+
+    function eliminarRelaciones(){
+      $.ajax({
+        url:"/deleteJuryTesis",
+        data: { 
+            'id': tesis
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+          //Mostrar mensaje de exito
+          insertarJurado();
+        }
+      });
+
+      $.ajax({
+        url:"/deleteDirectorTesis",
+        data: { 
+            'id': tesis
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+          //Mostrar mensaje de exito
+          insertarDirectores();
+          
+        }
+      });
+    }
+
+    function insertarDirectores(){
+      $.ajax({
+            url:"/insertDoctores",
+            data: { 
+                'director': d1o,
+                'codirector':d2o,
+                'codirector2': d3o,
+                'tesis': tesis,
+            },
+            type: "POST",
+            error: function(x,t,m){
+              console.log(x);
+              console.log(t);
+              console.log(m);
+            },
+            success: function(data){
+            }
+          });
+    }
+
+function insertarJurado(){
+  $.ajax({
+        url:"/insertJurado",
+        data: { 
+            'j1': j1o,
+            'j2': j2o,
+            'j3': j3o,
+            'j4': j4o,
+            'j5': j5o,
+            'tesis': tesis,
+        },
+        type: "POST",
+        error: function(x,t,m){
+          console.log(x);
+          console.log(t);
+          console.log(m);
+        },
+        success: function(data){
+        }
+      });
+}
+
+    function guardarUsuario(){
+      nombre = $("#usOrNombre").val();
+      apellidos = $("#usOrApellidos").val();
+      fecha = $("#usOrFecha").val();
+      orcid = $("#usOrOrcid").val();
+      webpage = $("#usOrPagina").val();
+      $.ajax({
+        url:"/updateUsuario",
+        data: { 
+            'nombre': nombre,
+            'apellidos': apellidos,
+            'orcid': orcid,
+            'pagina': webpage,
+            'fecha': fecha,
+            'id': usuario
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+          //Mostrar mensaje de exito
+          eliminarUsuario();
+        }
+      });
+    }
+
+    function eliminarUsuario(){
+      
+      $.ajax({
+        url:"/deleteUsuario",
+        data: { 
+            'id': usuarioEditado
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+        }
+      });
+    }
+
+    function eliminarUsuarioOriginal(){
+      
+      $.ajax({
+        url:"/deleteUsuario",
+        data: { 
+            'id': usuario
+        },
+        type: "POST",
+        error: function(x,t,m){
+          $("#msgFracaso").show();
+        },
+        success: function(data){
+        }
+      });
+    }
+
+    function escribirUsuarioOriginal(usuario){
+      $("#tabla-tesis").hide();
+      $("#tabla-usuario").show();
+      $("#usOrNombre").val(usuario.Name);
+      $("#usOrApellidos").val(usuario.Surname);
+      $("#usOrFecha").val(usuario.Birth);
+      $("#usOrOrcid").val(usuario.Orcid);
+      $("#usOrPagina").val(usuario.Webpage);
+    }
+
+    function escribirUsuarioEditado(usuario){
+      $("#tabla-tesis").hide();
+      $("#tabla-usuario").show();
+      $(".derecha").show();
+      $("#usEdNombre").val(usuario.Name);
+      $("#usEdApellidos").val(usuario.Surname);
+      $("#usEdFecha").val(usuario.Birth);
+      $("#usEdOrcid").val(usuario.Orcid);
+      $("#usEdPagina").val(usuario.Webpage);
+    }
+
+    function escribirTesisOriginal(tesis){
+      $("#tabla-tesis").show();
+      $("#tabla-usuario").hide();
+      $("#teOrTitulo").val(tesis.Title);
+      $("#teOrAbstract").val(tesis.Abstract);
+      $("#teOrFecha").val(tesis.DefenseDate);
+      $("#teOrDepartamento").val(tesis.Department);
+      $("#teOrUrl").val(tesis.Url);
+    }
+
+    function escribirTesisEditada(tesis){
+       $("#tabla-tesis").show();
+      $("#tabla-usuario").hide();
+      $(".derecha").show();
+      $("#teEdTitulo").val(tesis.Title);
+      $("#teEdAbstract").val(tesis.Abstract);
+      $("#teEdFecha").val(tesis.DefenseDate);
+      $("#teEdDepartamento").val(tesis.Department);
+      $("#teEdUrl").val(tesis.Url);
+    }
+
+    function getNewTesis(){
+    $.ajax({
+      url:"/getNewTesis",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          tablaTesNew.row.add( [ data[i].Titulo, data[i].Nombre+" "+data[i].Apellidos,data[i].Fecha, data[i].Institucion , "<button onclick='cargarNewTesis("+data[i].IdOrig+")' class='btn btn-primary btn-xs' ></i> Seleccionar </button>"] ).draw(true);
+        }
+      } 
+    });
+  }
+
+  function getDelTesis(){
+    $.ajax({
+      url:"/getDelTesis",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          tablaTesDel.row.add( [ data[i].Titulo, data[i].Nombre+" "+data[i].Apellidos,data[i].Fecha, data[i].Institucion , "<button onclick='cargarNewTesis("+data[i].IdOrig+")' class='btn btn-primary btn-xs' ></i> Seleccionar </button>"] ).draw(true);
+        }
+      } 
+    });
+  }
+    function getEditedTesis(){
+    $.ajax({
+      url:"/getEditedTesis",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          tablaTesEdit.row.add( [ data[i].Titulo, data[i].Nombre+" "+data[i].Apellidos,data[i].Fecha, data[i].Institucion , "<button onclick='cargarEditTesis("+data[i].IdOrig+","+data[i].IdEdit+")' class='btn btn-primary btn-xs'></i> Seleccionar </button>"] ).draw(true);
+        }
+      }
+      
+    });
+  }
+    function getNewUsuarios(){
+    $.ajax({
+      url:"/getNewUsuarios",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          tablaUsNew.row.add( [ data[i].Nombre, data[i].Apellidos, data[i].Fecha, data[i].Institucion , "<button onclick='cargarNewUsuario("+data[i].IdOrig+")' class='btn btn-primary btn-xs'></i> Seleccionar </button>"] ).draw(true);
+        }
+      }      
+    });
+  }
+
+  function getDelUsuarios(){
+    $.ajax({
+      url:"/getDelUsuarios",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          tablaUsDel.row.add( [ data[i].Nombre, data[i].Apellidos, data[i].Fecha, data[i].Institucion , "<button onclick='cargarNewUsuario("+data[i].IdOrig+")' class='btn btn-primary btn-xs'></i> Seleccionar </button>"] ).draw(true);
+        }
+      }      
+    });
+  }
+
+    function getEditedUsuarios(){
+    $.ajax({
+      url:"/getEditedUsuarios",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          tablaUsEdit.row.add( [ data[i].Nombre, data[i].Apellidos, data[i].Fecha, data[i].Institucion , "<button onclick='cargarEditUsuario("+data[i].IdOrig+","+data[i].IdEdit+")' class='btn btn-primary btn-xs'></i> Seleccionar </button>"] ).draw(true);
+        }
+      }    
+    });
+  }
+
+
+ //Cargar usuario
+  function cargarNewUsuario(id){
+    $.ajax({
+      url:"/getUsuario?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        $(".derecha").hide();
+        escribirUsuarioOriginal(data);
+        usuario=id;
+      }    
+    });
+  } 
+
+  //Cargar usuario
+  function cargarEditUsuario(idO,idE){
+    $.ajax({
+      url:"/getUsuario?id="+idO,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+       escribirUsuarioOriginal(data);
+       usuario=idO;
+      }    
+    });
+    $.ajax({
+      url:"/getUsuario?id="+idE,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        escribirUsuarioEditado(data);
+        usuarioEditado=idE;
+      }    
+    });
+  }
+
+//Cargar usuario
+  function cargarNewUsuarioThesis(id){
+    $.ajax({
+      url:"/getUsuario?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        institucion=data.IdInstitucion;
+      }    
+    });
+  } 
+
+//Cargar datos de la tesis seleccionada
+  function cargarEditTesis(idO,idE){
+    $.ajax({
+      url:"/getTesisID?id="+idO,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        tesis=idO;
+        institucion=data.IdInstitucion;
+        $("#teOrInstitucion").val(data.Institution);
+        escribirTesisOriginal(data);
+        getThesisRelOriginal(idO);     
+      }    
+    });
+
+    $.ajax({
+      url:"/getTesisID?id="+idE,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        tesisEditada=idE;
+        institucionEd= data.IdInstitucion;
+        $("#teEdInstitucion").val(data.Institution);
+        escribirTesisEditada(data);
+        getThesisRelEditado(idE);     
+      }    
+    });
+  }
+
+
+//Cargar datos de la tesis seleccionada
+  function cargarNewTesis(id){
+    $(".derecha").hide();
+    $.ajax({
+      url:"/getTesisID?id="+id,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        tesis=id;
+        institucion=data.IdInstitucion;
+        $("#teOrInstitucion").val(data.Institution);
+        escribirTesisOriginal(data);
+        getThesisRelOriginal(id); 
+      }    
+    });
+  }
+
+
+function getThesisRelOriginal(thesisId){
+    
+    $.ajax({
+      url:"/getUserByTesis?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        cargarNewUsuarioThesis(data);
+      }
+    });
+
+
+   //Cargar direccion de la tesis
+    $.ajax({
+      url:"/getDireccion?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+       for(i=0;i<data.length;i++){
+          $("#teOrDir"+(i+1)).val(data[i].Name+" "+data[i].Surname);
+        }
+        if(data[0]){
+          d1o=data[0].Id;
+        }
+
+        if(data[1]){
+          d2o=data[1].Id;
+        }
+
+        if(data[2]){
+          d3o=data[2].Id;
+        }
+      }
+    });
+    
+    //Cargar jurado de la tesis
+    $.ajax({
+      url:"/getJurado?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          $("#teOrTri"+(i+1)).val(data[i].Name+" "+data[i].Surname)
+        }
+        if(data[0]){
+          j1o=data[0].Id;
+        }
+
+        if(data[1]){
+          j2o=data[1].Id;
+        }
+
+        if(data[2]){
+          j3o=data[2].Id;
+        }
+
+        if(data[3]){
+          j4o=data[3].Id;
+        }
+
+        if(data[4]){
+          j5o=data[4].Id;
+        }
+
+      }
+    });
+
+    //Cargar keywords de la tesis
+    $.ajax({
+      url:"/getKeywords?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+       /* $("#tag-keywords").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-keywords").append(data[i].Word+", ");
+        }*/
+      }
+    });
+  }
+
+function getThesisRelEditado(thesisId){
+    console.log(thesisId);
+    $.ajax({
+      url:"/getUserByTesis?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        cargarNewUsuarioThesis(data);
+
+      }
+    });
+
+
+   //Cargar direccion de la tesis
+    $.ajax({
+      url:"/getDireccion?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log(data);
+        for(i=0;i<data.length;i++){
+          $("#teEdDir"+(i+1)).val(data[i].Name+" "+data[i].Surname)
+        }
+        if(data[0]){
+          d1e=data[0].Id;
+        }
+
+        if(data[1]){
+          d2e=data[1].Id;
+        }
+
+        if(data[2]){
+          d3e=data[2].Id;
+        }
+      }
+    });
+    
+    //Cargar jurado de la tesis
+    $.ajax({
+      url:"/getJurado?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        for(i=0;i<data.length;i++){
+          $("#teEdTri"+(i+1)).val(data[i].Name+" "+data[i].Surname)
+        }
+        if(data[0]){
+          j1e=data[0].Id;
+        }
+
+        if(data[1]){
+          j2e=data[1].Id;
+        }
+
+        if(data[2]){
+          j3e=data[2].Id;
+        }
+
+        if(data[3]){
+          j4e=data[3].Id;
+        }
+
+        if(data[4]){
+          j5e=data[4].Id;
+        }
+      }
+    });
+
+    //Cargar keywords de la tesis
+    $.ajax({
+      url:"/getKeywords?id="+thesisId,
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+       /* $("#tag-keywords").text("");
+        var i;
+        var string;
+        for(i=0;i<data.length;i++){
+          $("#tag-keywords").append(data[i].Word+", ");
+        }*/
+      }
+    });
+  }
+
+
+function buscarDoctor(){
+  //Cuidado con los espacios detras y delante
+  tipo = $("#selTipoBusqueda option:selected").text();
+  var nombre,apellidos;
+
+  if(tipo=="Nombre"){
+    nombre = $("#cajaBuscarDoctor").val();
+    apellidos="";
+
+  }else if(tipo=="Apellidos"){
+    apellidos = $("#cajaBuscarDoctor").val();
+    nombre = "";
+  }else{
+    cadena = $("#cajaBuscarDoctor").val();
+    palabras = cadena.split(',');
+    apellidos = palabras[0];
+    nombre = palabras[1];
+  }
+
+  nombre = nombre.trim();
+  nombre = nombre.toLowerCase();
+  apellidos = apellidos.trim();
+  apellidos = apellidos.toLowerCase();
+  //Buscar doctores
+  $.ajax({
+    url:"/searchUsuarios?nombre="+nombre+"&apellidos="+apellidos,
+    type: "GET",
+    error: function(x,t,m){
+      console.log(x);
+    },
+    success: function(data){
+      console.log(data);
+      tablaFloat.clear();
+      var i
+      for(i=0;i<data.length;i++){
+        tablaFloat.row.add( [data[i].Name+" "+data[i].Surname,data[i].Birth,data[i].Orcid,data[i].Webpage,data[i].Id]).draw(true);
+      }
+    }
+  });
+}
+
+function abrirSeleccionDoctor(caja){
+  cajaPulsada=caja;
+  $("#ventanaSeleccion").css('display',"block");
+}
+
+
+
+  function logOut(){
+    $.ajax({
+      url:"/closeSession",
+      type: "GET",
+      error: function(x,t,m){
+        console.log(x);
+      },
+      success: function(data){
+        console.log("Ha cerrado sesion");
+      }
+      
+    });
+  }
+
+</script>
+
+
+</body>
+</html>

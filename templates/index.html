@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Hello, world!</title>
+    
+    <style type="text/css">
+      label {
+        width: 90px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+  
+  <script type=text/javascript>
+    var oauthWindow;
+
+    function openORCID() {
+      /*
+        var oauthWindow = window.location.href = "https://sandbox.orcid.org/oauth/authorize?client_id=APP-DI48OJOVPURZQ7N2&response_type=code&scope=/authenticate&redirect_uri=http://localhost:8000/orcid";*/
+        var oauthWindow = window.location.href = "https://sandbox.orcid.org/oauth/authorize?client_id=APP-DI48OJOVPURZQ7N2&response_type=code&scope=/orcid-profile/read-limited&redirect_uri=http://localhost:8000/orcid";
+        
+    }
+
+    function login(){
+      user = $("#name").val();
+      pass = $("#password").val();
+
+      $.ajax({
+        url:"/pruebalogin",
+        data: { 
+            'user': user,
+            'pass': pass
+        },
+        type: "POST",
+        error: function(x,t,m){
+          console.log(x);
+          console.log(t);
+          console.log(m);
+        },
+        success: function(data){
+          val=data.Valor;
+          if(val==-1){
+            $("#warn").css('display','block');
+          }else{
+            window.location.replace("http://localhost:8000/doctor?id="+data.Valor);
+          }
+        }
+      });
+      return false;
+    }
+
+
+    function crearUsuario(){
+      nombre = $("#nombre").val();
+      apellidos = $("#apellidos").val();
+      email = $("#email").val();
+      pass = $("#pass").val();
+
+      $.ajax({
+        url:"/crearUsuario",
+        data: { 
+            'nombre': nombre,
+            'apellidos': apellidos,
+            'email': email,
+            'pass': pass
+        },
+        type: "POST",
+        error: function(x,t,m){
+          console.log(x);
+          console.log(t);
+          console.log(m);
+        },
+        success: function(data){
+          $("#msgDialog").text("Usuario creado correctamente");
+        }
+      });
+    }
+
+  </script>
+    <div id="dialog" style="display: none;" title="Registro">
+      <label>Nombre:</label>
+      <input id="nombre" name="name" type="text">
+      <label>Apellidos:</label>
+      <input id="apellidos" name="name" type="text">
+      <label>Email:</label>
+      <input id="email" name="email" type="text">
+      <label>Constraseña:</label>
+      <input id="pass" name="name" type="password">
+      <p id="msgDialog" ></p>
+      <button class="btn btn-success" onclick="crearUsuario();" style="margin-left: 7%;margin-top: 2%;">Crear Usuario</button>
+    </div>
+
+    <div class="panel panel-info" style="margin-left: 30%;margin-right: 30%;margin-top: 15%">
+      <div class="panel-heading" style="text-align: center;font-weight: bold;font-size: 125%;">Log in</div>
+      <div class="panel-body">
+        <div id="left-login" style="float: left;">
+            <div class="row">
+              <label for="name" style="width: 100px;text-align: right;">User name</label>
+              <input type="text" id="name" name="name" style="margin-left: 10px">
+            </div>
+            <div class="row">
+              <label for="password" style="width: 100px;text-align: right">Password</label>
+              <input type="password" id="password" name="password" style="margin-left: 10px">
+            </div>
+          <button class="btn btn-success" onclick="login();" style="margin-left: 40%">Login</button>
+          <button class="btn btn-primary" onclick="$('#dialog').dialog();" style="margin-left: 2%">Registro</button>
+          <p id="warn" style="color: red;display: none;">email or password incorrect</p>
+        </div>  
+        <div id="right-login" style="float: left;margin-left: 20px;">
+          <button id="connect-orcid-button" onclick="openORCID();return false;"><img id="orcid-id-logo" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width='24' height='24' alt="ORCID logo"/>Sign in with ORCID iD</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
